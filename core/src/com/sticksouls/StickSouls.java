@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class StickSouls extends ApplicationAdapter {
-	AssetManager assetManager;
-	SpriteBatch batch;
-	OrthographicCamera camera;	
+	private AssetManager assetManager;
+	private SpriteBatch batch;
+	private OrthographicCamera camera;	
 	
 	@Override
 	public void create () {
@@ -34,6 +34,7 @@ public class StickSouls extends ApplicationAdapter {
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    
 		batch.begin();
 		
 		// check if the assets are already loaded
