@@ -2,6 +2,8 @@ package com.sticksouls.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +18,7 @@ import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
-public class Menu implements Screen, Hud {
+public class Menu extends Hud implements Screen, InputProcessor{
 	
 	final private StickSouls game;
 	private ScreenViewport viewPort;
@@ -28,31 +30,29 @@ public class Menu implements Screen, Hud {
 	
 	private Label title;
 	private Label[] optionsText;
-	private Label.LabelStyle titleStyle, optionsStyle;
+	private Label.LabelStyle titleStyle, optionsStyle, optionSelectedStyle;
+	
+	private int selected = 0;
 	
 	public Menu(final StickSouls game) {
 		this.game = game;
 		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//camera = new OrthographicCamera();
+		//camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
-		createFonts();
-		createActors();
-		populateStage();
-		
-		Render.batch = game.batch;
+		Render.batch = this.game.batch;
 	}
 
 	@Override
 	public void show() {
-		
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0, 1);
-		camera.update();
-		Render.batch.setProjectionMatrix(camera.combined);
+		//camera.update();
+		//Render.batch.setProjectionMatrix(camera.combined);
 		Render.batch.begin();
 
 		for(int i = 0; i < optionsText.length; i++) {
@@ -62,8 +62,12 @@ public class Menu implements Screen, Hud {
 			if(optionsText[i].hit(mouseLocalPosition.x, mouseLocalPosition.y, false) != null ) {
 			    //System.out.println("Dentro de " + optionsText[i].getText());
 				
+				optionSelected(optionsText, i);
+				
 				if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 					System.out.println("Clic izquierdo en " + optionsText[i].getText());
+					
+					selectOption();
 					
 				}
 			}
@@ -76,27 +80,23 @@ public class Menu implements Screen, Hud {
 		stage.draw();
 	}
 
+	private void optionSelected(Label[] options, int option) {
+		for (int i = 0; i < options.length; i++) {
+			options[i].setStyle(optionsStyle);
+			if(i == option) {
+				options[i].setStyle(optionSelectedStyle);
+			}
+		}
+		selected = option;
+	}
+	
+	private void selectOption() {
+		System.out.println("selectOption" + selected);
+	}
+
 	@Override
 	public void resize(int width, int height) {
 		viewPort.update(width, height, true);
-	}
-
-	@Override
-	public void pause() {
-		
-		
-	}
-
-	@Override
-	public void resume() {
-		
-		
-	}
-
-	@Override
-	public void hide() {
-		
-		
 	}
 
 	@Override
@@ -108,11 +108,12 @@ public class Menu implements Screen, Hud {
 	
 	@Override
 	public void createFonts() {
-		titleStyle = FontStyle.generateFont(80, "#ffffff", true, Resources.MENU_FONT);
-		optionsStyle = FontStyle.generateFont(50, "#ffffff", true, Resources.MENU_FONT);
+		titleStyle = FontStyle.generateFont(80, "#ffffff", false, Resources.MENU_FONT);
+		optionsStyle = FontStyle.generateFont(50, "#ffffff", false, Resources.MENU_FONT);
+		optionSelectedStyle = FontStyle.generateFont(50, "#ffff00", true, Resources.MENU_FONT);
+		
 	}
 
-	@Override
 	public void createActors() {
 		viewPort = new ScreenViewport();
 		stage = new Stage(viewPort);
@@ -137,7 +138,6 @@ public class Menu implements Screen, Hud {
 		
 	}
 
-	@Override
 	public void populateStage() {
 		
 		interfaz.add(title).padTop(10);
@@ -158,11 +158,100 @@ public class Menu implements Screen, Hud {
 		
 		stage.addActor(interfaz);
 	}
+	
 
 	@Override
+	public boolean keyDown(int keycode) {
+		switch(keycode) {
+		case Keys.W:
+		case Keys.UP:
+
+			if((selected - 1) >= 0) {
+				selected--;
+				optionSelected(optionsText, selected);
+			}
+			break;
+			
+		case Keys.S:
+		case Keys.DOWN:
+			if((selected + 1) <= optionsText.length -1) {
+				selected++;
+				optionSelected(optionsText, selected);
+			}
+			
+			break;
+			
+		case Keys.ENTER:
+			selectOption();
+			break;
+		}
+		
+		
+		System.out.println(keycode);
+		
+		return false;
+	}
+	
+	//Funciones y metodos implementados sin usar
+	
+	
+
+	@Override
+	public void pause() {
+		
+		
+	}
+
+	@Override
+	public void resume() {
+		
+		
+	}
+
+	@Override
+	public void hide() {
+		
+		
+	}
+
 	public void render() {
 		
 		
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		return false;
 	}
 
 }

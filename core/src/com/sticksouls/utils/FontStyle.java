@@ -20,7 +20,9 @@ public abstract class FontStyle {
 	    parameter.borderWidth = 1;
 	    parameter.minFilter = Texture.TextureFilter.Linear; //esto hace que no se vea tan mal cuando se reescala
 	    parameter.magFilter = Texture.TextureFilter.Linear;
+	    
 	    if(shadow) {
+	    	parameter.shadowColor = Color.valueOf(hex);
 	    	parameter.shadowOffsetX = 3;
 	    	parameter.shadowOffsetY = 3;
 	    }
