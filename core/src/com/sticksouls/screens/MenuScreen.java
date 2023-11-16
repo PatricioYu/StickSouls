@@ -3,7 +3,6 @@ package com.sticksouls.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -14,25 +13,25 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sticksouls.StickSouls;
 import com.sticksouls.hud.Hud;
+import com.sticksouls.inputs.InputsListener;
+import com.sticksouls.inputs.MyInput;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
-public class MenuScreen extends Hud implements Screen, InputProcessor{
+public class MenuScreen extends Hud implements Screen, MyInput{
 	
 	private final StickSouls GAME;
-	private ScreenViewport viewPort;
-	private Stage stage;
 	private OrthographicCamera camera;
 	
-	private Table interfaz;
+	private Table menuTable;
 	private Table options;
 	
 	private Label title;
 	private Label[] optionsText;
 	private Label.LabelStyle titleStyle, optionsStyle, optionSelectedStyle;
 	
-	private int selected = 0;
+	private int selected = -1;
 	
 	public MenuScreen(final StickSouls GAME) {
 		this.GAME = GAME;
@@ -43,7 +42,8 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(this);
+		InputsListener.addInputs(this);
+		InputsListener.setActualIndex(this);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 		
 		Render.batch.end();
 		
-		interfaz.act(delta);
+		menuTable.act(delta);
 		
 		stage.draw();
 	}
@@ -91,11 +91,17 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 	private void selectOption() {
 		System.out.println("selectOption" + selected);
 		
+		
 		switch(selected) {
 		// play
 		case 0:
-			GAME.setScreen(new GameScreen());
+			GAME.setScreen(new GameScreen(GAME));
 			
+			break;
+			
+		// Configurations
+		case 1:
+			GAME.configurationsHud.toggleToShow();
 			break;
 			
 		case 2:
@@ -106,17 +112,11 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		viewPort.update(width, height, true);
-	}
-
-	@Override
 	public void dispose() {
 		stage.dispose();
 		
 	}
 
-	
 	@Override
 	public void createFonts() {
 		titleStyle = FontStyle.generateFont(80, "#ffffff", false, Resources.MENU_FONT);
@@ -126,13 +126,10 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 	}
 
 	public void createActors() {
-		viewPort = new ScreenViewport();
-		stage = new Stage(viewPort);
-		
-		//Tablas
-		interfaz = new Table();
-		interfaz.setFillParent(true);
-		interfaz.debug();
+		//Tables
+		menuTable = new Table();
+		menuTable.setFillParent(true);
+		menuTable.debug();
 		
 		options = new Table();
 		
@@ -140,14 +137,12 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 		title = new Label("StickSouls", titleStyle);
 		
 		optionsText = new Label[3];
-		
 		optionsText[0] = new Label("Jugar", optionsStyle);
 		optionsText[1] = new Label("Configuraciones", optionsStyle);
 		optionsText[2] = new Label("Salir", optionsStyle);
-		
 		//optionsText[0].setBounds(optionsText[0].getX(), optionsText[0].getY(), optionsText[0].getWidth(), optionsText[0].getHeight());
 	}
-
+	
 	public void populateStage() {
 		//Tabla opciones
 		options.add(optionsText[0]);
@@ -157,18 +152,16 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 		options.add(optionsText[2]);
 		options.row();
 		
+		menuTable.add(title).padTop(10);
+		menuTable.row();
+		menuTable.add(options).expand();
+		menuTable.row();
 		
-		interfaz.add(title).padTop(10);
-		interfaz.row();
-		interfaz.add(options).expand();
-		interfaz.row();
-		
-		stage.addActor(interfaz);
+		super.stage.addActor(menuTable);
 	}
-	
 
 	@Override
-	public boolean keyDown(int keycode) {
+	public void keyDown(int keycode) {
 		switch(keycode) {
 		// go up
 		case Keys.W:
@@ -177,7 +170,10 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 				selected--;
 				optionSelected(optionsText, selected);
 			}
-			
+			if (selected == -1) {
+				selected = 0;
+				optionSelected(optionsText, selected);
+			}
 			break;
 			
 		case Keys.S:
@@ -200,7 +196,6 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 		
 		System.out.println(keycode);
 		
-		return false;
 	}
 	
 	//Funciones y metodos implementados sin usar
@@ -219,43 +214,8 @@ public class MenuScreen extends Hud implements Screen, InputProcessor{
 		
 	}
 
-	public void render() {
+	public void draw() {
 		
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		return false;
 	}
 
 }

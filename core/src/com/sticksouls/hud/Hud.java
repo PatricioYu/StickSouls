@@ -1,17 +1,28 @@
 package com.sticksouls.hud;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 public abstract class Hud {
 	
+	private ScreenViewport viewPort;
+	protected Stage stage;
+	
 	public Hud() {
+		viewPort = new ScreenViewport();
+        stage = new Stage(viewPort);
 		createFonts();
 		createActors();
 		populateStage();
 	}
 	
+	public void resize(int width, int height) {
+		viewPort.update(width, height, true);
+	}
 	
 	protected abstract void createFonts();
 	protected abstract void createActors();
 	protected abstract void populateStage();
-	protected abstract void resize(int width, int height);
-	protected abstract void render();
+	public abstract void draw();
+	
 }
