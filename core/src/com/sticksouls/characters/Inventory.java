@@ -10,10 +10,12 @@ public class Inventory {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	
 	public void equipWeapon(boolean primary, Weapon weapon) {
-		if(primary) {
+		if(primary && items.contains(weapon)) {
 			this.equippedWeapons[0] = weapon;
-		} else {
+		} else if(!primary && items.contains(weapon)) {
 			this.equippedWeapons[1] = weapon;
+		} else {
+			System.out.println("You don't have that weapon");
 		}
 	}
 }
