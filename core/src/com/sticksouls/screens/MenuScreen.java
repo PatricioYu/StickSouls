@@ -1,4 +1,4 @@
-package com.sticksouls.Screens;
+package com.sticksouls.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,9 +18,9 @@ import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
-public class Menu extends Hud implements Screen, InputProcessor{
+public class MenuScreen extends Hud implements Screen, InputProcessor{
 	
-	final private StickSouls game;
+	private final StickSouls GAME;
 	private ScreenViewport viewPort;
 	private Stage stage;
 	private OrthographicCamera camera;
@@ -34,13 +34,11 @@ public class Menu extends Hud implements Screen, InputProcessor{
 	
 	private int selected = 0;
 	
-	public Menu(final StickSouls game) {
-		this.game = game;
+	public MenuScreen(final StickSouls GAME) {
+		this.GAME = GAME;
 		
 		//camera = new OrthographicCamera();
 		//camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
-		Render.batch = this.game.batch;
 	}
 
 	@Override
@@ -68,7 +66,6 @@ public class Menu extends Hud implements Screen, InputProcessor{
 					System.out.println("Clic izquierdo en " + optionsText[i].getText());
 					
 					selectOption();
-					
 				}
 			}
 		}
@@ -87,11 +84,25 @@ public class Menu extends Hud implements Screen, InputProcessor{
 				options[i].setStyle(optionSelectedStyle);
 			}
 		}
+		
 		selected = option;
 	}
 	
 	private void selectOption() {
 		System.out.println("selectOption" + selected);
+		
+		switch(selected) {
+		// play
+		case 0:
+			GAME.setScreen(new GameScreen());
+			
+			break;
+			
+		case 2:
+	        Gdx.app.exit();
+			
+			break;
+		}
 	}
 
 	@Override
@@ -134,15 +145,10 @@ public class Menu extends Hud implements Screen, InputProcessor{
 		optionsText[1] = new Label("Configuraciones", optionsStyle);
 		optionsText[2] = new Label("Salir", optionsStyle);
 		
-		optionsText[0].setBounds(optionsText[0].getX(), optionsText[0].getY(), optionsText[0].getWidth(), optionsText[0].getHeight());
-		
+		//optionsText[0].setBounds(optionsText[0].getX(), optionsText[0].getY(), optionsText[0].getWidth(), optionsText[0].getHeight());
 	}
 
 	public void populateStage() {
-		
-		interfaz.add(title).padTop(10);
-		interfaz.row();
-		
 		//Tabla opciones
 		options.add(optionsText[0]);
 		options.row();
@@ -152,9 +158,10 @@ public class Menu extends Hud implements Screen, InputProcessor{
 		options.row();
 		
 		
+		interfaz.add(title).padTop(10);
+		interfaz.row();
 		interfaz.add(options).expand();
 		interfaz.row();
-		
 		
 		stage.addActor(interfaz);
 	}
@@ -163,16 +170,19 @@ public class Menu extends Hud implements Screen, InputProcessor{
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode) {
+		// go up
 		case Keys.W:
 		case Keys.UP:
-
 			if((selected - 1) >= 0) {
 				selected--;
 				optionSelected(optionsText, selected);
 			}
+			
 			break;
 			
 		case Keys.S:
+			
+		// go down
 		case Keys.DOWN:
 			if((selected + 1) <= optionsText.length -1) {
 				selected++;
@@ -181,11 +191,12 @@ public class Menu extends Hud implements Screen, InputProcessor{
 			
 			break;
 			
+		// select
 		case Keys.ENTER:
 			selectOption();
+			
 			break;
 		}
-		
 		
 		System.out.println(keycode);
 		
@@ -193,29 +204,22 @@ public class Menu extends Hud implements Screen, InputProcessor{
 	}
 	
 	//Funciones y metodos implementados sin usar
-	
-	
-
 	@Override
 	public void pause() {
-		
 		
 	}
 
 	@Override
 	public void resume() {
 		
-		
 	}
 
 	@Override
 	public void hide() {
 		
-		
 	}
 
 	public void render() {
-		
 		
 	}
 

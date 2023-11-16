@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.sticksouls.Screens.Menu;
+import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.Render;
 
 public class StickSouls extends Game {
@@ -39,7 +39,7 @@ public class StickSouls extends Game {
 		batch = new SpriteBatch();
 		Render.batch = batch;
 		
-		this.setScreen(new Menu(this));
+		this.setScreen(new MenuScreen(this));
 		
 		// Initialize Box2D
 		Box2D.init();
