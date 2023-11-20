@@ -1,6 +1,9 @@
 package com.sticksouls.characters;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -11,13 +14,23 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
 
 public abstract class Character {
+	protected final int WIDTH = 32, HEIGHT = 32;
 	protected int hp, stamina, currency;
+	protected float frameDuration = 0.1f, stateTime;
 	protected Inventory inventory;
+	protected Sprite idleSprite;
 	protected Texture spriteSheet;
+	protected TextureRegion[][] frames;
+	protected TextureRegion[] walkFrames;
+	protected Animation<TextureRegion> walkAnimation;
 	protected Body characterBody;
 	protected CharacterState state;
 
 	protected Character(World world, float x, float y, int hp, int stamina, int currency) {
+		this.hp = hp;
+		this.stamina = stamina;
+		this.currency = currency;
+		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(x, y);
@@ -39,9 +52,7 @@ public abstract class Character {
 		
 		circle.dispose();
 		
-		this.hp = hp;
-		this.stamina = stamina;
-		this.currency = currency;
+		characterBody.setTransform(x, y, 0);
 		
 		state = CharacterState.IDLE;
 		inventory = new Inventory();
@@ -58,5 +69,9 @@ public abstract class Character {
 
 	public int getCurrency() {
 		return currency;
+	}
+	
+	public Sprite getSprite() {
+		return idleSprite;
 	}
 }
