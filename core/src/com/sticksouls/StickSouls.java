@@ -44,6 +44,5 @@ public class StickSouls extends Game {
 	public void dispose () {
 		super.dispose();
 		Render.batch.dispose();
-		
 	}
 }

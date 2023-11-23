@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
 
 public abstract class Character {
-	protected final int WIDTH = 32, HEIGHT = 32;
+	protected final int ROWS = 1, COLUMNS = 4;
 	protected int hp, stamina, currency;
 	protected float frameDuration = 0.1f, stateTime;
 	protected Inventory inventory;
@@ -47,8 +47,9 @@ public abstract class Character {
 		fixtureDef.density = 0.5f;
 		fixtureDef.friction = 0.4f;
 		
+		
 		// Create our fixture and attach it to the body
-		Fixture fixture = characterBody.createFixture(fixtureDef);
+//		Fixture fixture = characterBody.createFixture(fixtureDef);
 		
 		circle.dispose();
 		
@@ -69,9 +70,5 @@ public abstract class Character {
 
 	public int getCurrency() {
 		return currency;
-	}
-	
-	public Sprite getSprite() {
-		return idleSprite;
 	}
 }

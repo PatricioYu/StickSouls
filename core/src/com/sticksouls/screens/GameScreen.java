@@ -87,7 +87,8 @@ public class GameScreen implements Screen, MyInput{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		world.dispose();
+		debugRenderer.dispose();
 	}
 
 	@Override

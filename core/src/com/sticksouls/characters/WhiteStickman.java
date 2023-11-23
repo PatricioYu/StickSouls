@@ -14,9 +14,9 @@ public class WhiteStickman extends Character {
 		super(world, x, y, 100, 100, 50);
 
 		spriteSheet = new Texture(Resources.WHITE_STICKMAN_SPRITESHEET);
-		frames = TextureRegion.split(spriteSheet, WIDTH, HEIGHT);
+		frames = TextureRegion.split(spriteSheet, spriteSheet.getWidth()/COLUMNS, spriteSheet.getHeight()/ROWS);
 		
-		idleSprite = new Sprite(frames[0][0], 0, 0, WIDTH, HEIGHT);
+		idleSprite = new Sprite(frames[0][0], 0, 0, 32, 32);
 		
 		walkFrames = new TextureRegion[3];
 		
@@ -25,7 +25,7 @@ public class WhiteStickman extends Character {
 		}
 		
 		walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
-	
+		
 		stateTime = 0f;
 	}
 	
