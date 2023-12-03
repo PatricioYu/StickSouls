@@ -47,6 +47,8 @@ public abstract class Character {
 		fixtureDef.density = 0.5f;
 		fixtureDef.friction = 0.4f;
 		
+		characterBody.createFixture(fixtureDef);
+		
 		
 		// Create our fixture and attach it to the body
 //		Fixture fixture = characterBody.createFixture(fixtureDef);
