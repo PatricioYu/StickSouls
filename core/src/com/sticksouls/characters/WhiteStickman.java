@@ -23,7 +23,7 @@ public class WhiteStickman extends Character {
 		spriteSheet = new Texture(Resources.WHITE_STICKMAN_SPRITESHEET);
 		frames = TextureRegion.split(spriteSheet, spriteSheet.getWidth()/COLUMNS, spriteSheet.getHeight()/ROWS);
 		
-		idleSprite = new Sprite(frames[0][0], 0, 0, 32, 32);
+		//idleSprite = new Sprite(frames[0][0], 0, 0, 32, 32);
 		
 		walkFrames = new TextureRegion[3];
 		
@@ -37,10 +37,11 @@ public class WhiteStickman extends Character {
 	}
 	
 	public void draw() {
-		idleSprite.draw(Render.batch);
+		//idleSprite.draw(Render.batch);
 		movement();
 		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
-		Render.batch.draw(walkAnimation.getKeyFrame(stateTime), super.characterBody.getPosition().x, super.characterBody.getPosition().y);
+		Render.batch.draw(walkAnimation.getKeyFrame(stateTime), super.characterBody.getPosition().x - walkAnimation.getKeyFrame(stateTime).getRegionWidth()/2, super.characterBody.getPosition().y - walkAnimation.getKeyFrame(stateTime).getRegionHeight()/2);
+	
 	}
 	
 	private void movement() {

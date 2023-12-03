@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
 
@@ -34,26 +35,24 @@ public abstract class Character {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(x, y);
+		bodyDef.fixedRotation = true;
 		
 		characterBody = world.createBody(bodyDef);
 		
 		// Create a circle shape and set its radius to 6
-		CircleShape circle = new CircleShape();
-		circle.setRadius(6f);
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(5, 10);
 		
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
+		fixtureDef.shape = shape;
 		fixtureDef.density = 0.5f;
 		fixtureDef.friction = 0.4f;
 		
+		// Attach the fixture to the body
 		characterBody.createFixture(fixtureDef);
-		
-		
-		// Create our fixture and attach it to the body
-//		Fixture fixture = characterBody.createFixture(fixtureDef);
-		
-		circle.dispose();
+				
+		shape.dispose();
 		
 		characterBody.setTransform(x, y, 0);
 		
