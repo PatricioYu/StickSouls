@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.sticksouls.enums.CharacterState;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
@@ -36,34 +37,42 @@ public class WhiteStickman extends Character {
 			walkFrames[i-1] = frames[0][i];
 		}
 		
-		walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+		walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
 		
 		stateTime = 0f;
 	}
 	
 	public void draw() {
+		stateTime += Gdx.graphics.getDeltaTime();
 		//idleSprite.draw(Render.batch);
 		if (dashTimeRemaining > 0) {
 			dash();
 			dashTimeRemaining -= Gdx.graphics.getDeltaTime();
-        }
-		else {
+        } else {
 			movement();
-			
 		}
 		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
-		Render.batch.draw(walkAnimation.getKeyFrame(stateTime), super.characterBody.getPosition().x - walkAnimation.getKeyFrame(stateTime).getRegionWidth()/2, super.characterBody.getPosition().y - walkAnimation.getKeyFrame(stateTime).getRegionHeight()/2);
+		
+		TextureRegion currentFrame = (state == CharacterState.WALK)?walkAnimation.getKeyFrame(stateTime, true):walkFrames[0];
+		
+		Render.batch.draw(currentFrame, super.characterBody.getPosition().x - currentFrame.getRegionWidth()/2, super.characterBody.getPosition().y - currentFrame.getRegionHeight()/2);
 		
 	}
 	
 	private void movement() {
-		float velocidad = 500f;
+		float velocity = 500f;
 
 		super.characterBody.setLinearVelocity(0, 0);
 		
 		float moveX = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D) ? 1 : Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A) ? -1 : 0;
         float moveY = Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
 
+        if(moveX != 0) {
+        	state = CharacterState.WALK;
+        } else {
+        	state = CharacterState.IDLE;
+        }
+        
 		super.characterBody.setLinearVelocity(moveX * velocidad, moveY * velocidad);
 		
 		camera.position.set(super.characterBody.getPosition().x, super.characterBody.getPosition().y, 0);
@@ -79,12 +88,10 @@ public class WhiteStickman extends Character {
 	        Vector2 impulse = new Vector2(dashVelocity * moveX, dashVelocity * moveY);
 	        
             super.characterBody.applyLinearImpulse(impulse, super.characterBody.getLocalCenter(), true);
-            
-		}else {
+		} else {
             dashTimeRemaining = dashTime;
         }
-		
-
-
     }
+	
+	
 }
