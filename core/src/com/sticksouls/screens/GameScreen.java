@@ -1,6 +1,7 @@
 package com.sticksouls.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -83,7 +85,6 @@ public class GameScreen implements Screen, MyInput{
 		            Body body = world.createBody(bd);
 		            body.createFixture(fixDef);
 		            shape.dispose();
-					
 				}
 			}
 		}
@@ -145,8 +146,16 @@ public class GameScreen implements Screen, MyInput{
 
 	@Override
 	public void keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		switch(keycode) {
 		
+		case Keys.SPACE:
+			
+			whiteStickman.dash();
+
+			break;
+		
+		} 
 	}
+	
 	
 }

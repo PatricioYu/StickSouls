@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="spritesmapa" tilewidth="32" tileheight="32" tilecount="100" columns="10">
  <image source="spritesmapa.png" width="320" height="320"/>
+ <tile id="1">
+  <objectgroup draworder="index" id="2">
+   <object id="1" name="Wall" x="0.0846337" y="0.0846337" width="32" height="32"/>
+  </objectgroup>
+ </tile>
  <tile id="10">
   <objectgroup draworder="index" id="2">
    <object id="1" name="Wall" x="0" y="0" width="32" height="32"/>

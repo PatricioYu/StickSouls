@@ -46,7 +46,7 @@ public abstract class Character {
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-		fixtureDef.density = 0.5f;
+		fixtureDef.density = 1f;
 		fixtureDef.friction = 0.4f;
 		
 		// Attach the fixture to the body
