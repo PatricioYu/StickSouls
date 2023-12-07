@@ -24,8 +24,6 @@ public class StickSouls extends Game {
 		
 		configurationsHud = new ConfigurationsHud();
 		
-
-		
 		//Create Inputs
 		inputManager = new InputManager();
 		

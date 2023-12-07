@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.StickSouls;
 import com.sticksouls.characters.WhiteStickman;
+import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
 import com.sticksouls.utils.Render;
@@ -32,10 +32,12 @@ public class GameScreen implements Screen, MyInput{
 	private WhiteStickman whiteStickman;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
-	private OrthographicCamera camera;	
+	private OrthographicCamera camera;
+	private PauseHud menuPause;
 	
 	public GameScreen(final StickSouls GAME) {
 		this.GAME = GAME;
+		menuPause = new PauseHud(GAME);
 		
 		// Create a new OrthographicCamera
 		camera = new OrthographicCamera();
@@ -48,7 +50,6 @@ public class GameScreen implements Screen, MyInput{
 		// Create world and setup debugRenderer
 		world = new World(new Vector2(0, 0), true);
 		debugRenderer = new Box2DDebugRenderer();
-		
 		
 		whiteStickman = new WhiteStickman(world, 0, 0, camera);
 	}
@@ -103,11 +104,15 @@ public class GameScreen implements Screen, MyInput{
 		
 		Render.batch.begin();
 		
+		// Hud's
+		menuPause.draw();
+		
 		// Stepping the simulation
 		world.step(1/144f, 6, 2);
 		
 		// Player movement and sprite
-		whiteStickman.draw();
+		whiteStickman.draw();			
+		
 		
 		Render.batch.end();
 		
@@ -151,9 +156,11 @@ public class GameScreen implements Screen, MyInput{
 		case Keys.SPACE:
 			
 			whiteStickman.dash();
-
 			break;
-		
+			
+		case Keys.ESCAPE:
+			menuPause.display();
+			break;
 		} 
 	}
 	

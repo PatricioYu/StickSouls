@@ -58,13 +58,9 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			Vector2 mouseLocalPosition = optionsText[i].screenToLocalCoordinates(mouseScreenPosition);
 
 			if(optionsText[i].hit(mouseLocalPosition.x, mouseLocalPosition.y, false) != null ) {
-			    //System.out.println("Dentro de " + optionsText[i].getText());
-				
 				optionSelected(optionsText, i);
 				
 				if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-					System.out.println("Clic izquierdo en " + optionsText[i].getText());
-					
 					selectOption();
 				}
 			}
@@ -74,7 +70,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		
 		menuTable.act(delta);
 		
-		stage.draw();
+		super.stage.draw();
 	}
 
 	private void optionSelected(Label[] options, int option) {
@@ -101,7 +97,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			
 		// Configurations
 		case 1:
-			GAME.configurationsHud.toggleToShow();
+			GAME.configurationsHud.display();
 			break;
 			
 		case 2:
@@ -215,6 +211,16 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	}
 
 	public void draw() {
+		
+	}
+
+	@Override
+	public void display() {
+		
+	}
+
+	@Override
+	public void close() {
 		
 	}
 

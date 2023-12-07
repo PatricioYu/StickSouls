@@ -16,10 +16,10 @@ public class WhiteStickman extends Character {
 	
 	private OrthographicCamera camera;
 	
-	 private float dashVelocity = 50000f;
-	 private float dashTime = .3f; 
-	 private float dashTimeRemaining = 0f;
-
+	private float dashVelocity = 50000f;
+	private float dashTime = .3f; 
+	private float dashTimeRemaining = 0f;
+	private float movementSpeed = 500f;
 
 	public WhiteStickman(World world, float x, float y, OrthographicCamera camera) {
 		super(world, x, y, 100, 100, 50);
@@ -51,8 +51,9 @@ public class WhiteStickman extends Character {
         } else {
 			movement();
 		}
-		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
 		
+		
+		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
 		TextureRegion currentFrame = (state == CharacterState.WALK)?walkAnimation.getKeyFrame(stateTime, true):walkFrames[0];
 		
 		Render.batch.draw(currentFrame, super.characterBody.getPosition().x - currentFrame.getRegionWidth()/2, super.characterBody.getPosition().y - currentFrame.getRegionHeight()/2);
@@ -60,12 +61,10 @@ public class WhiteStickman extends Character {
 	}
 	
 	private void movement() {
-		float velocity = 500f;
-
 		super.characterBody.setLinearVelocity(0, 0);
 		
-		float moveX = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D) ? 1 : Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A) ? -1 : 0;
-        float moveY = Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
+		float moveX = Gdx.input.isKeyPressed(Keys.D) ? 1 : Gdx.input.isKeyPressed(Keys.A) ? -1 : 0;
+        float moveY = Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
 
         if(moveX != 0) {
         	state = CharacterState.WALK;
@@ -73,7 +72,7 @@ public class WhiteStickman extends Character {
         	state = CharacterState.IDLE;
         }
         
-		super.characterBody.setLinearVelocity(moveX * velocidad, moveY * velocidad);
+		super.characterBody.setLinearVelocity(moveX * movementSpeed , moveY * movementSpeed);
 		
 		camera.position.set(super.characterBody.getPosition().x, super.characterBody.getPosition().y, 0);
 		camera.update();
@@ -82,8 +81,8 @@ public class WhiteStickman extends Character {
 	public void dash() {
 
 		if (dashTimeRemaining > 0) {
-			float moveX = Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D) ? 1 : Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A) ? -1 : 0;
-	        float moveY = Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
+			float moveX = Gdx.input.isKeyPressed(Keys.D) ? 1 : Gdx.input.isKeyPressed(Keys.A) ? -1 : 0;
+	        float moveY = Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
 			
 	        Vector2 impulse = new Vector2(dashVelocity * moveX, dashVelocity * moveY);
 	        

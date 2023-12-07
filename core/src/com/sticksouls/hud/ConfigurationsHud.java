@@ -14,16 +14,6 @@ public class ConfigurationsHud extends Hud implements MyInput{
 		
 	}
 	
-	public void toggleToShow() {
-		visible = true;
-		InputsListener.setActualIndex(this);
-    }
-	
-	public void toggleToHide() {
-		visible = false;
-		InputsListener.setPreviousIndex();
-    }
-
 	@Override
 	protected void createFonts() {
 		// TODO Auto-generated method stub
@@ -50,7 +40,19 @@ public class ConfigurationsHud extends Hud implements MyInput{
 
 	@Override
 	public void keyDown(int keycode) {
-		toggleToHide();
+		close();
+	}
+
+	@Override
+	public void display() {
+		visible = true;
+		InputsListener.setActualIndex(this);
+	}
+
+	@Override
+	public void close() {
+		visible = false;
+		InputsListener.setPreviousIndex();	
 	}
 
 }
