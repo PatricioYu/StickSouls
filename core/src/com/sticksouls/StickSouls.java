@@ -12,7 +12,7 @@ import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.Render;
 
 public class StickSouls extends Game {
-	public ConfigurationsHud configurationsHud;
+
 	private AssetManager assetManager;
 	private InputManager inputManager;
 
@@ -21,8 +21,6 @@ public class StickSouls extends Game {
 		Render.batch = new SpriteBatch();
 		
 		this.setScreen(new MenuScreen(this));
-		
-		configurationsHud = new ConfigurationsHud();
 		
 		//Create Inputs
 		inputManager = new InputManager();
@@ -35,7 +33,6 @@ public class StickSouls extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		super.render();
-		configurationsHud.draw();
 	}
 	
 	@Override

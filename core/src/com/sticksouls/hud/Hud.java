@@ -9,6 +9,7 @@ public abstract class Hud{
 	
 	private ScreenViewport viewPort;
 	protected Stage stage;
+	public boolean visible;
 	
 	public Hud() {
 		viewPort = new ScreenViewport();

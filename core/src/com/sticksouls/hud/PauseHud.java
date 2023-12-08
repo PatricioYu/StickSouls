@@ -16,6 +16,7 @@ import com.sticksouls.utils.Resources;
 public class PauseHud extends Hud implements MyInput {
 	
 	final StickSouls GAME;
+	private ConfigurationsHud configurationsHud;
 	
 	private Table pauseTable;
 	private Table options;
@@ -24,8 +25,7 @@ public class PauseHud extends Hud implements MyInput {
 	private Label.LabelStyle optionsStyle, optionSelectedStyle;
 	
 	private int selected = -1;
-	public boolean visible = false;
-	
+
 	public PauseHud(final StickSouls GAME) {
 		this.GAME = GAME;
 		
@@ -47,9 +47,10 @@ public class PauseHud extends Hud implements MyInput {
 		
 		options = new Table();
 		
-		optionsText = new Label[2];
+		optionsText = new Label[3];
 		optionsText[0] = new Label("Resume", optionsStyle);
-		optionsText[1] = new Label("Exit", optionsStyle);
+		optionsText[1] = new Label("Configurations", optionsStyle);
+		optionsText[2] = new Label("Exit", optionsStyle);
 		
 	}
 
@@ -58,6 +59,8 @@ public class PauseHud extends Hud implements MyInput {
 		options.add(optionsText[0]);
 		options.row();
 		options.add(optionsText[1]);
+		options.row();
+		options.add(optionsText[2]);
 		options.row();
 		
 		pauseTable.add(options).expand();
@@ -69,7 +72,7 @@ public class PauseHud extends Hud implements MyInput {
 
 	@Override
 	public void draw() {
-		if(visible) {
+		if(super.visible) {
 			for(int i = 0; i < optionsText.length; i++) {
 				Vector2 mouseScreenPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 				Vector2 mouseLocalPosition = optionsText[i].screenToLocalCoordinates(mouseScreenPosition);
@@ -84,7 +87,9 @@ public class PauseHud extends Hud implements MyInput {
 			}
 			
 			super.stage.draw();
-
+		}
+		if(configurationsHud != null) {
+			configurationsHud.draw();			
 		}
 	}
 	
@@ -109,6 +114,15 @@ public class PauseHud extends Hud implements MyInput {
 			this.close();
 			break;
 		case 1:
+			if(configurationsHud == null) {
+				configurationsHud = new ConfigurationsHud();
+			}
+			
+			super.visible = false;
+			configurationsHud.display();
+			
+			break;
+		case 2:
 			GAME.setScreen(new MenuScreen(GAME));
 			break;
 		}
@@ -145,14 +159,14 @@ public class PauseHud extends Hud implements MyInput {
 
 	@Override
 	public void display() {
-		visible = true;
-		InputsListener.setActualIndex(this);
+		super.visible = true;
+		InputsListener.setMyIndex(this);
 	}
 
 
 	@Override
 	public void close() {
-		visible = false;
+		super.visible = false;
 		InputsListener.setPreviousIndex();
 	}
 

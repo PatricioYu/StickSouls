@@ -57,7 +57,7 @@ public class GameScreen implements Screen, MyInput{
 	@Override
 	public void show() {
 		InputsListener.addInputs(this);
-		InputsListener.setActualIndex(this);
+		InputsListener.setMyIndex(this);
 		
 		// Map render
 		Render.tiledMapRenderer = new OrthogonalTiledMapRenderer(Resources.MAP);

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sticksouls.StickSouls;
+import com.sticksouls.hud.ConfigurationsHud;
 import com.sticksouls.hud.Hud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
@@ -23,6 +24,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	
 	private final StickSouls GAME;
 	private OrthographicCamera camera;
+	private ConfigurationsHud configurationsHud;
 	
 	private Table menuTable;
 	private Table options;
@@ -35,6 +37,8 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	
 	public MenuScreen(final StickSouls GAME) {
 		this.GAME = GAME;
+		super.visible = true;
+		configurationsHud = new ConfigurationsHud();
 		
 		//camera = new OrthographicCamera();
 		//camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -43,7 +47,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	@Override
 	public void show() {
 		InputsListener.addInputs(this);
-		InputsListener.setActualIndex(this);
+		InputsListener.setMyIndex(this);
 	}
 
 	@Override
@@ -52,25 +56,11 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		//camera.update();
 		//Render.batch.setProjectionMatrix(camera.combined);
 		Render.batch.begin();
-
-		for(int i = 0; i < optionsText.length; i++) {
-			Vector2 mouseScreenPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-			Vector2 mouseLocalPosition = optionsText[i].screenToLocalCoordinates(mouseScreenPosition);
-
-			if(optionsText[i].hit(mouseLocalPosition.x, mouseLocalPosition.y, false) != null ) {
-				optionSelected(optionsText, i);
-				
-				if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-					selectOption();
-				}
-			}
-		}
+		
+		this.draw();			
+		configurationsHud.draw();
 		
 		Render.batch.end();
-		
-		menuTable.act(delta);
-		
-		super.stage.draw();
 	}
 
 	private void optionSelected(Label[] options, int option) {
@@ -97,7 +87,8 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			
 		// Configurations
 		case 1:
-			GAME.configurationsHud.display();
+			super.visible = false;
+			configurationsHud.display();
 			break;
 			
 		case 2:
@@ -154,6 +145,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		menuTable.row();
 		
 		super.stage.addActor(menuTable);
+		
 	}
 
 	@Override
@@ -188,13 +180,9 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			selectOption();
 			
 			break;
-		}
-		
-		System.out.println(keycode);
-		
+		}	
 	}
 	
-	//Funciones y metodos implementados sin usar
 	@Override
 	public void pause() {
 		
@@ -211,7 +199,24 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	}
 
 	public void draw() {
-		
+		if(super.visible) {
+			for(int i = 0; i < optionsText.length; i++) {
+				Vector2 mouseScreenPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+				Vector2 mouseLocalPosition = optionsText[i].screenToLocalCoordinates(mouseScreenPosition);
+
+				if(optionsText[i].hit(mouseLocalPosition.x, mouseLocalPosition.y, false) != null ) {
+					optionSelected(optionsText, i);
+					
+					if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+						selectOption();
+					}
+				}
+			}
+			
+			menuTable.act(Gdx.graphics.getDeltaTime());
+	
+			super.stage.draw();
+		}
 	}
 
 	@Override
