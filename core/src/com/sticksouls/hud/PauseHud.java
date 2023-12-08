@@ -116,6 +116,7 @@ public class PauseHud extends Hud implements MyInput {
 		case 1:
 			if(configurationsHud == null) {
 				configurationsHud = new ConfigurationsHud();
+				InputsListener.setPreviousIndex();
 			}
 			
 			super.visible = false;
