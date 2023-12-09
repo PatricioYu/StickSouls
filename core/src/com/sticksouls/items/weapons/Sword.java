@@ -1,5 +1,7 @@
 package com.sticksouls.items.weapons;
 
+import java.nio.file.spi.FileSystemProvider;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sticksouls.enums.Directions;
+import com.sticksouls.utils.Render;
 
 public class Sword extends Weapon {
 
@@ -21,31 +24,36 @@ public class Sword extends Weapon {
 	
 	public Sword(final Body CHARACTERBODY, World world) {
 		super("Sword", "a Sword", 1, 15, CHARACTERBODY, world);
-		
+		jointSelected = rightJoint;
 	}
+	
+	public void draw() {
+		super.draw();
 
+		sprite.setRotation(MathUtils.radiansToDegrees * weaponBody.getAngle());
+		sprite.setPosition(super.weaponBody.getPosition().x - sprite.getWidth()/2, super.weaponBody.getPosition().y - sprite.getHeight()/2);
+		sprite.setOriginCenter();
+		
+		System.out.println(sprite.getX() + " " + sprite.getY());
+		System.out.println(sprite.getOriginX() + " " + sprite.getOriginY());
+		
+		Render.batch.draw(sprite, sprite.getX(), sprite.getY(), sprite.getOriginX(), sprite.getOriginY(), sprite.getWidth(), sprite.getHeight(), 1, 1, sprite.getRotation());
+	}
+	
 	@Override
-	public void attack(Vector2 characterCoordinates) {
-		
-		System.out.println(Gdx.input.getY() + " " + positiveLine(Gdx.input.getX(), characterCoordinates));
-		
+	public void attack(Vector2 characterCoordinates) {		
 		if(Gdx.input.getY() < positiveLine(Gdx.input.getX(), characterCoordinates) && Gdx.input.getY() < negativeLine(Gdx.input.getX(), characterCoordinates)) {
-			System.out.println("mitad arriba");
 			direction = Directions.TOP;
 		}
 		if(Gdx.input.getY() <= positiveLine(Gdx.input.getX(), characterCoordinates) && Gdx.input.getY() >= negativeLine(Gdx.input.getX(), characterCoordinates)) {
-			System.out.println("mitad derecha");
 			direction = Directions.RIGHT;
 		}		
 		if(Gdx.input.getY() > positiveLine(Gdx.input.getX(), characterCoordinates) && Gdx.input.getY() > negativeLine(Gdx.input.getX(), characterCoordinates)) {
-			System.out.println("mitad abajo");
 			direction = Directions.BOTTOM;
 		}
 		if(Gdx.input.getY() >= positiveLine(Gdx.input.getX(), characterCoordinates) && Gdx.input.getY() <= negativeLine(Gdx.input.getX(), characterCoordinates)) {
-			System.out.println("mitad izquierda");
 			direction = Directions.LEFT;
 		}
-		
 		
 		switch(direction) {
 		case TOP:
@@ -98,10 +106,7 @@ public class Sword extends Weapon {
 
 	@Override
 	public boolean continueAttack() {
-		
 		swingTimer -= Gdx.graphics.getDeltaTime();
-		
-		
 		
 		return finishAttack();
 	}

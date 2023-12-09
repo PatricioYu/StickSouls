@@ -72,9 +72,8 @@ public class WhiteStickman extends Character {
 		if(attacking) {
 			attacking = weapon.continueAttack();
 		}
-		if(!attacking) {
-			weapon.draw();			
-		}
+		weapon.draw();			
+		
 		
 		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
 		TextureRegion currentFrame = (state == CharacterState.WALK)?walkAnimation.getKeyFrame(stateTime, true):walkFrames[0];

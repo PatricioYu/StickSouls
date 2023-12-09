@@ -1,8 +1,11 @@
 package com.sticksouls.items.weapons;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,11 +19,13 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.sticksouls.items.Item;
+import com.sticksouls.utils.Render;
+import com.sticksouls.utils.Resources;
 
 public abstract class Weapon extends Item {
 	protected int baseDmg, empoweredDmg;
 	protected float frameDuration = 0.1f;
-	protected Texture spriteSheet;
+	protected Sprite sprite;
 	protected TextureRegion[][] basicAttackFrames;
 	protected TextureRegion[][] empoweredAttackFrames;
 	protected Animation<TextureRegion> basicAttackAnimation;
@@ -45,6 +50,9 @@ public abstract class Weapon extends Item {
 		this.height = height;
 		this.world = world;
 		
+		this.sprite = new Sprite(new Texture(Resources.SWORD));
+		sprite.setPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
 		createWeaponBody(world);
 		
 		rightJointDef = new RevoluteJointDef();
@@ -54,8 +62,8 @@ public abstract class Weapon extends Item {
 		
 		rightJoint = createJoint(new Vector2(5, 0), new Vector2(0, -10), rightJointDef);
 		leftJoint = createJoint(new Vector2(-5, 0), new Vector2(0, -10), leftJointDef);
-		topJoint = createJoint(new Vector2(0, 8), new Vector2(0, -10), topJointDef);
-		bottomJoint = createJoint(new Vector2(0, -8), new Vector2(0, -10), bottomJointDef);
+		topJoint = createJoint(new Vector2(0, 8), new Vector2(0, -15), topJointDef);
+		bottomJoint = createJoint(new Vector2(0, -8), new Vector2(0, -15), bottomJointDef);
 		
 		destroyAllJoints();
 		createJoint(rightJointDef);
@@ -91,13 +99,13 @@ public abstract class Weapon extends Item {
 			firstDraw = true;
 			weaponBody.setTransform(CHARACTERBODY.getPosition().x + 5, CHARACTERBODY.getPosition().y, 0);
 		}
-		//this.rightJoint.setLimits(0, 0);
+		
 	}
 
 	private void createWeaponBody(World world){
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(0, 0);
+		bodyDef.position.set(sprite.getX(), sprite.getY());
 		
 		weaponBody = world.createBody(bodyDef);
 		createFixture();
