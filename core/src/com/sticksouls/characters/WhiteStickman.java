@@ -1,13 +1,16 @@
 package com.sticksouls.characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sticksouls.enums.CharacterState;
 import com.sticksouls.items.weapons.Sword;
 import com.sticksouls.utils.Render;
@@ -54,9 +57,20 @@ public class WhiteStickman extends Character {
 			movement();
 		}
 		
-		if(Gdx.input.isTouched()) {
-			weapon.attack();
+		// Attack
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !attacking) {
+			
+			float bodyX = super.characterBody.getPosition().x;
+			float bodyY = super.characterBody.getPosition().y;
+
+			Vector3 screenCoordinates = new Vector3(bodyX, bodyY, 0);
+			camera.project(screenCoordinates);
+			
+			weapon.attack(new Vector2(screenCoordinates.x, screenCoordinates.y));
 			attacking = true;
+		}
+		if(attacking) {
+			attacking = weapon.continueAttack();
 		}
 		if(!attacking) {
 			weapon.draw();			
