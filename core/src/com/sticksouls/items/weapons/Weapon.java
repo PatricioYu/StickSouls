@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -19,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.sticksouls.items.Item;
-import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
 public abstract class Weapon extends Item {
@@ -74,8 +72,8 @@ public abstract class Weapon extends Item {
 		jointDef.bodyA = CHARACTERBODY;
 		jointDef.bodyB = weaponBody;
 		jointDef.collideConnected = false;
-		jointDef.localAnchorA.set(anchorA.x, anchorA.y); // Punto de anclaje en el cuerpo del personaje (ajustar según la forma del personaje)
-		jointDef.localAnchorB.set(anchorB.x, anchorB.y); // Punto de anclaje en la espada (ajustar según la forma de la espada)
+		jointDef.localAnchorA.set(anchorA.x, anchorA.y);
+		jointDef.localAnchorB.set(anchorB.x, anchorB.y);
 		jointDef.enableLimit = true;
 		
 		return (RevoluteJoint) world.createJoint(jointDef);
@@ -97,7 +95,7 @@ public abstract class Weapon extends Item {
 	public void draw() {
 		if(!firstDraw) {
 			firstDraw = true;
-			weaponBody.setTransform(CHARACTERBODY.getPosition().x + 5, CHARACTERBODY.getPosition().y, 0);
+			weaponBody.setTransform(weaponBody.getPosition().x + 5, weaponBody.getPosition().y, 0);
 		}
 		
 	}

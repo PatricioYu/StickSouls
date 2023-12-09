@@ -13,7 +13,7 @@ import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Resources;
 
-public class PauseHud extends Hud implements MyInput {
+public class RedesHud extends Hud implements MyInput {
 	
 	final StickSouls GAME;
 	private ConfigurationsHud configurationsHud;
@@ -26,7 +26,7 @@ public class PauseHud extends Hud implements MyInput {
 	
 	private int selected = -1;
 
-	public PauseHud(final StickSouls GAME) {
+	public RedesHud(final StickSouls GAME) {
 		this.GAME = GAME;
 		
 		InputsListener.addInputs(this);
@@ -48,9 +48,9 @@ public class PauseHud extends Hud implements MyInput {
 		options = new Table();
 		
 		optionsText = new Label[3];
-		optionsText[0] = new Label("Resume", optionsStyle);
-		optionsText[1] = new Label("Configurations", optionsStyle);
-		optionsText[2] = new Label("Exit", optionsStyle);
+		optionsText[0] = new Label("Volver", optionsStyle);
+		optionsText[1] = new Label("Cliente", optionsStyle);
+		optionsText[2] = new Label("Servidor", optionsStyle);
 		
 	}
 
@@ -111,17 +111,12 @@ public class PauseHud extends Hud implements MyInput {
 			this.close();
 			break;
 		case 1:
-			if(configurationsHud == null) {
-				configurationsHud = new ConfigurationsHud();
-				InputsListener.setPreviousIndex();
-			}
-			
-			super.visible = false;
-			configurationsHud.display();
+			// Cliente
 			
 			break;
 		case 2:
-			GAME.setScreen(new MenuScreen(GAME));
+			// Servidor
+			
 			break;
 		}
 	}

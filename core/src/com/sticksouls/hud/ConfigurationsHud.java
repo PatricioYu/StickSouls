@@ -41,9 +41,6 @@ public class ConfigurationsHud extends Hud implements MyInput{
 	
 
 	private void selectOption() {
-		System.out.println("selectOption" + selected);
-		
-		
 		switch(selected) {
 		// play
 		case 0:

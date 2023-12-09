@@ -49,7 +49,7 @@ public class WhiteStickman extends Character {
 	
 	public void draw() {
 		stateTime += Gdx.graphics.getDeltaTime();
-		//idleSprite.draw(Render.batch);
+		
 		if (dashTimeRemaining > 0) {
 			dash();
 			dashTimeRemaining -= Gdx.graphics.getDeltaTime();

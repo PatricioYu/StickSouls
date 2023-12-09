@@ -6,14 +6,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sticksouls.StickSouls;
 import com.sticksouls.hud.ConfigurationsHud;
 import com.sticksouls.hud.Hud;
+import com.sticksouls.hud.RedesHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
 import com.sticksouls.utils.FontStyle;
@@ -25,6 +24,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	private final StickSouls GAME;
 	private OrthographicCamera camera;
 	private ConfigurationsHud configurationsHud;
+	private RedesHud redesHud;
 	
 	private Table menuTable;
 	private Table options;
@@ -39,6 +39,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		this.GAME = GAME;
 		super.visible = true;
 		configurationsHud = new ConfigurationsHud();
+		redesHud = new RedesHud(GAME);
 		
 		//camera = new OrthographicCamera();
 		//camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -59,6 +60,7 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		
 		this.draw();			
 		configurationsHud.draw();
+		redesHud.draw();
 		
 		Render.batch.end();
 	}
@@ -75,9 +77,6 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 	}
 	
 	private void selectOption() {
-		System.out.println("selectOption" + selected);
-		
-		
 		switch(selected) {
 		// play
 		case 0:
@@ -92,8 +91,12 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			break;
 			
 		case 2:
-	        Gdx.app.exit();
+			super.visible = false;
+	        redesHud.display();
+			break;
 			
+		case 3: 
+			Gdx.app.exit();
 			break;
 		}
 	}
@@ -123,10 +126,11 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		//Labels
 		title = new Label("StickSouls", titleStyle);
 		
-		optionsText = new Label[3];
+		optionsText = new Label[4];
 		optionsText[0] = new Label("Jugar", optionsStyle);
 		optionsText[1] = new Label("Configuraciones", optionsStyle);
-		optionsText[2] = new Label("Salir", optionsStyle);
+		optionsText[2] = new Label("Redes", optionsStyle);
+		optionsText[3] = new Label("Salir", optionsStyle);
 		//optionsText[0].setBounds(optionsText[0].getX(), optionsText[0].getY(), optionsText[0].getWidth(), optionsText[0].getHeight());
 	}
 	
@@ -137,6 +141,8 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		options.add(optionsText[1]);
 		options.row();
 		options.add(optionsText[2]);
+		options.row();
+		options.add(optionsText[3]);
 		options.row();
 		
 		menuTable.add(title).padTop(10);

@@ -34,9 +34,6 @@ public class Sword extends Weapon {
 		sprite.setPosition(super.weaponBody.getPosition().x - sprite.getWidth()/2, super.weaponBody.getPosition().y - sprite.getHeight()/2);
 		sprite.setOriginCenter();
 		
-		System.out.println(sprite.getX() + " " + sprite.getY());
-		System.out.println(sprite.getOriginX() + " " + sprite.getOriginY());
-		
 		Render.batch.draw(sprite, sprite.getX(), sprite.getY(), sprite.getOriginX(), sprite.getOriginY(), sprite.getWidth(), sprite.getHeight(), 1, 1, sprite.getRotation());
 	}
 	
@@ -60,8 +57,6 @@ public class Sword extends Weapon {
 			jointSelected = super.topJoint;
 			jointDefSelected = super.topJointDef;
 
-			//jointSelected.setLimits(90 * MathUtils.degRad, 90 * MathUtils.degRad);
-			
 			super.weaponBody.setAngularVelocity(-25);
 			super.weaponBody.setTransform(super.weaponBody.getWorldCenter(), 90 * MathUtils.degRad);
 			break;
