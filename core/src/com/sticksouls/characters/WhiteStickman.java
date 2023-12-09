@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
+import com.sticksouls.items.weapons.Sword;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
@@ -20,10 +21,10 @@ public class WhiteStickman extends Character {
 	private float dashTime = .3f; 
 	private float dashTimeRemaining = 0f;
 	private float movementSpeed = 500f;
+	private boolean attacking = false;
 
 	public WhiteStickman(World world, float x, float y, OrthographicCamera camera) {
 		super(world, x, y, 100, 100, 50);
-		
 		this.camera = camera;
 
 		spriteSheet = new Texture(Resources.WHITE_STICKMAN_SPRITESHEET);
@@ -39,6 +40,7 @@ public class WhiteStickman extends Character {
 		
 		walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
 		
+		super.weapon = new Sword(super.characterBody, world);
 		stateTime = 0f;
 	}
 	
@@ -52,6 +54,13 @@ public class WhiteStickman extends Character {
 			movement();
 		}
 		
+		if(Gdx.input.isTouched()) {
+			weapon.attack();
+			attacking = true;
+		}
+		if(!attacking) {
+			weapon.draw();			
+		}
 		
 		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
 		TextureRegion currentFrame = (state == CharacterState.WALK)?walkAnimation.getKeyFrame(stateTime, true):walkFrames[0];
@@ -91,6 +100,5 @@ public class WhiteStickman extends Character {
             dashTimeRemaining = dashTime;
         }
     }
-	
 	
 }

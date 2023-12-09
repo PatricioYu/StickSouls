@@ -44,7 +44,6 @@ public class GameScreen implements Screen, MyInput{
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		// Set an initial zoom level
 		camera.zoom = 0.6f;
-		
 		// Initialize Box2D
 		Box2D.init();
 		// Create world and setup debugRenderer

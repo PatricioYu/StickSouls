@@ -7,18 +7,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
+import com.sticksouls.items.weapons.Weapon;
 
 public abstract class Character {
 	protected final int ROWS = 1, COLUMNS = 4;
 	protected int hp, stamina, currency;
 	protected float frameDuration = 0.1f, stateTime;
-	protected Inventory inventory;
+	protected Weapon weapon;
 	protected Sprite idleSprite;
 	protected Texture spriteSheet;
 	protected TextureRegion[][] frames;
@@ -31,6 +30,7 @@ public abstract class Character {
 		this.hp = hp;
 		this.stamina = stamina;
 		this.currency = currency;
+		
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -57,7 +57,6 @@ public abstract class Character {
 		characterBody.setTransform(x, y, 0);
 		
 		state = CharacterState.IDLE;
-		inventory = new Inventory();
 	}
 
 	// getters

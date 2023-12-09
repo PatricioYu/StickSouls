@@ -108,7 +108,6 @@ public class PauseHud extends Hud implements MyInput {
 	private void selectOption() {
 		System.out.println("selectOption" + selected);
 		
-		
 		switch(selected) {
 		case 0:
 			this.close();

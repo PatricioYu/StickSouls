@@ -5,5 +5,5 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Render {
 	public static SpriteBatch batch;
-	public static  OrthogonalTiledMapRenderer tiledMapRenderer;
+	public static OrthogonalTiledMapRenderer tiledMapRenderer;
 }
