@@ -31,6 +31,7 @@ public class ClientScreen extends Hud implements Screen, MyInput{
 	private Label.LabelStyle titleStyle, optionsStyle, optionSelectedStyle;
 	
 	private int selected = -1;
+	private boolean ready = false;
 	
 	
 	public ClientScreen(final StickSouls GAME) {
@@ -41,7 +42,7 @@ public class ClientScreen extends Hud implements Screen, MyInput{
 	}
 	
 	public void ready() {
-		GAME.setScreen(new GameScreenClient(GAME, cliente));
+		ready = true;
 	}
 	
 	
@@ -55,7 +56,9 @@ public class ClientScreen extends Hud implements Screen, MyInput{
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0, 1);
 		Render.batch.begin();
-		
+		if(ready) {
+			GAME.setScreen(new GameScreenClient(GAME, cliente));
+		}
 		this.draw();			
 	
 		Render.batch.end();

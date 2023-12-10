@@ -22,7 +22,6 @@ import com.sticksouls.characters.WhiteStickman;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
-import com.sticksouls.redes.cliente.Cliente;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
@@ -43,7 +42,6 @@ public class GameScreenServer implements Screen, MyInput{
 		this.GAME = GAME;
 		this.servidor = servidor;
 		this.consola = consola;
-		menuPause = new PauseHud(GAME);
 		
 		// Create a new OrthographicCamera
 		camera = new OrthographicCamera();
@@ -54,9 +52,7 @@ public class GameScreenServer implements Screen, MyInput{
 		Box2D.init();
 		// Create world and setup debugRenderer
 		world = new World(new Vector2(0, 0), true);
-		debugRenderer = new Box2DDebugRenderer();
 		
-		whiteStickman = new WhiteStickman(world, 0, 0, camera);
 	}
 
 	@Override
@@ -64,6 +60,10 @@ public class GameScreenServer implements Screen, MyInput{
 		InputsListener.addInputs(this);
 		InputsListener.setMyIndex(this);
 		
+		debugRenderer = new Box2DDebugRenderer();
+		menuPause = new PauseHud(GAME);
+		whiteStickman = new WhiteStickman(world, 0, 0, camera);
+
 		// Map render
 		Render.tiledMapRenderer = new OrthogonalTiledMapRenderer(Resources.MAP);
 		

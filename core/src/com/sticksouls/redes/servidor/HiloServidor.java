@@ -51,7 +51,10 @@ public class HiloServidor extends Thread {
 				System.out.println("Error al recibir el mensaje");
 			}
 		}
-		sendAllMessage("serverDisconected");
+
+		if(!socket.isClosed()) {
+			sendAllMessage("serverDisconected");			
+		}
 		socket.close();
 	}
 
@@ -75,6 +78,7 @@ public class HiloServidor extends Thread {
 			
 			if(contConnections == 2) {
 				sendAllMessage("ready");
+				serverScreen.ready();
 			}
 			break;
 			

@@ -2,8 +2,8 @@ package com.sticksouls.redes.servidor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,8 +13,6 @@ import com.sticksouls.hud.Hud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
 import com.sticksouls.redes.RedUtils;
-import com.sticksouls.redes.cliente.Cliente;
-import com.sticksouls.redes.cliente.juego.GameScreenClient;
 import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Render;
@@ -33,7 +31,7 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 	private Label.LabelStyle titleStyle, optionsStyle, optionSelectedStyle;
 	
 	private int selected = -1;
-	
+	private boolean ready = false;
 	
 	public ServerScreen(final StickSouls GAME) {
 		this.GAME = GAME;
@@ -44,7 +42,7 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 	}
 	
 	public void ready() {
-		GAME.setScreen(new GameScreenServer(GAME, servidor, consola));
+		ready = true;
 	}
 	
 	
@@ -58,7 +56,9 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0, 1);
 		Render.batch.begin();
-		
+		if(ready) {
+			GAME.setScreen(new GameScreenServer(GAME, servidor, consola));
+		}
 		this.draw();			
 	
 		Render.batch.end();

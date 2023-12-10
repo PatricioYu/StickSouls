@@ -123,7 +123,6 @@ public class RedesHud extends Hud implements MyInput {
 			break;
 		case 2:
 			// Servidor
-			
 			GAME.setScreen(new ServerScreen(GAME));
 			InputsListener.setPreviousIndex();
 			break;
