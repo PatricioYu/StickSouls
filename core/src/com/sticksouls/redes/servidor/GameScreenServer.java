@@ -38,6 +38,8 @@ public class GameScreenServer implements Screen, MyInput{
 	private Servidor servidor;
 	private ConsolaDebug consola;
 	
+	private boolean toggleConsola = false;
+	
 	public GameScreenServer(final StickSouls GAME, Servidor servidor, ConsolaDebug consola) {
 		this.GAME = GAME;
 		this.servidor = servidor;
@@ -104,28 +106,32 @@ public class GameScreenServer implements Screen, MyInput{
 		Render.tiledMapRenderer.setView(camera);
 		Render.tiledMapRenderer.render();
 		Render.batch.setProjectionMatrix(camera.combined);
-		
-		//debugRenderer.render(world, camera.combined);
+
+		if(Gdx.input.isKeyJustPressed(Keys.TAB)) {
+			toggleConsola = !toggleConsola;
+		}
 		
 		Render.batch.begin();
 		
-		// Hud's
+		if(toggleConsola) {		
+			consola.render();
+		}
 		menuPause.draw();
-		
-		// Stepping the simulation
-		world.step(1/144f, 6, 2);
-		
-		// Player movement and sprite
 		whiteStickman.draw();			
 		
+		world.step(1/144f, 6, 2);
+	
+		//debugRenderer.render(world, camera.combined);		
 		
 		Render.batch.end();
+		
+		
 		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		
+		consola.reEscalar(width, height);
 	}
 
 	@Override
