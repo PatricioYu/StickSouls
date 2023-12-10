@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.sticksouls.StickSouls;
 import com.sticksouls.hud.ConfigurationsHud;
 import com.sticksouls.hud.Hud;
-import com.sticksouls.hud.RedesHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
+import com.sticksouls.redes.RedesHud;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
@@ -81,7 +81,6 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 		// play
 		case 0:
 			GAME.setScreen(new GameScreen(GAME));
-			
 			break;
 			
 		// Configurations
@@ -89,12 +88,12 @@ public class MenuScreen extends Hud implements Screen, MyInput{
 			super.visible = false;
 			configurationsHud.display();
 			break;
-			
+		// Redes
 		case 2:
 			super.visible = false;
 	        redesHud.display();
 			break;
-			
+		// Exit
 		case 3: 
 			Gdx.app.exit();
 			break;

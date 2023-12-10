@@ -95,7 +95,7 @@ public abstract class Weapon extends Item {
 	public void draw() {
 		if(!firstDraw) {
 			firstDraw = true;
-			weaponBody.setTransform(weaponBody.getPosition().x + 5, weaponBody.getPosition().y, 0);
+			weaponBody.setTransform(weaponBody.getPosition().x, weaponBody.getPosition().y, 0);
 		}
 		
 	}

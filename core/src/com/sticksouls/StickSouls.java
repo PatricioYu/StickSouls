@@ -6,8 +6,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.sticksouls.hud.ConfigurationsHud;
 import com.sticksouls.inputs.InputManager;
+import com.sticksouls.redes.RedUtils;
 import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.Render;
 
@@ -39,5 +39,13 @@ public class StickSouls extends Game {
 	public void dispose () {
 		super.dispose();
 		Render.batch.dispose();
+		if(RedUtils.hiloCliente != null) {
+			RedUtils.hiloCliente.end();
+			RedUtils.hiloCliente.interrupt();			
+		}
+		if(RedUtils.hiloServidor != null) {
+			RedUtils.hiloServidor.end();
+			RedUtils.hiloServidor.interrupt();			
+		}
 	}
 }

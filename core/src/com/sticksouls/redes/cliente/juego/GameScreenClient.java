@@ -1,4 +1,4 @@
-package com.sticksouls.screens;
+package com.sticksouls.redes.cliente.juego;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -22,10 +22,11 @@ import com.sticksouls.characters.WhiteStickman;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
+import com.sticksouls.redes.cliente.Cliente;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
-public class GameScreen implements Screen, MyInput{
+public class GameScreenClient implements Screen, MyInput{
 	
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
@@ -35,8 +36,11 @@ public class GameScreen implements Screen, MyInput{
 	private OrthographicCamera camera;
 	private PauseHud menuPause;
 	
-	public GameScreen(final StickSouls GAME) {
+	private Cliente cliente;
+	
+	public GameScreenClient(final StickSouls GAME, Cliente cliente) {
 		this.GAME = GAME;
+		this.cliente = cliente;
 		menuPause = new PauseHud(GAME);
 		
 		// Create a new OrthographicCamera

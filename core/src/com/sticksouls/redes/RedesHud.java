@@ -1,4 +1,4 @@
-package com.sticksouls.hud;
+package com.sticksouls.redes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,9 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.sticksouls.StickSouls;
+import com.sticksouls.hud.ConfigurationsHud;
+import com.sticksouls.hud.Hud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
-import com.sticksouls.screens.MenuScreen;
+import com.sticksouls.redes.cliente.ClientScreen;
+import com.sticksouls.redes.servidor.ServerScreen;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Resources;
 
@@ -86,6 +89,7 @@ public class RedesHud extends Hud implements MyInput {
 				}
 			}
 			
+			
 			super.stage.draw();
 		}
 		if(configurationsHud != null) {
@@ -113,10 +117,15 @@ public class RedesHud extends Hud implements MyInput {
 		case 1:
 			// Cliente
 			
+			GAME.setScreen(new ClientScreen(GAME));
+			InputsListener.setPreviousIndex();
+			
 			break;
 		case 2:
 			// Servidor
 			
+			GAME.setScreen(new ServerScreen(GAME));
+			InputsListener.setPreviousIndex();
 			break;
 		}
 	}

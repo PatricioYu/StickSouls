@@ -1,4 +1,4 @@
-package com.sticksouls.screens;
+package com.sticksouls.redes.servidor.juego;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -25,7 +25,7 @@ import com.sticksouls.inputs.MyInput;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
-public class GameScreen implements Screen, MyInput{
+public class GameScreenServer implements Screen, MyInput{
 	
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
@@ -35,7 +35,7 @@ public class GameScreen implements Screen, MyInput{
 	private OrthographicCamera camera;
 	private PauseHud menuPause;
 	
-	public GameScreen(final StickSouls GAME) {
+	public GameScreenServer(final StickSouls GAME) {
 		this.GAME = GAME;
 		menuPause = new PauseHud(GAME);
 		
