@@ -18,10 +18,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.StickSouls;
-import com.sticksouls.characters.WhiteStickman;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
+import com.sticksouls.items.weapons.OnlineWhiteStickman;
+import com.sticksouls.redes.OnlinePlayer;
+import com.sticksouls.redes.RedUtils;
 import com.sticksouls.redes.cliente.Cliente;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
@@ -30,15 +32,16 @@ public class GameScreenClient implements Screen, MyInput{
 	
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
-	private WhiteStickman whiteStickman;
+	private OnlineWhiteStickman whiteStickman;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera camera;
 	private PauseHud menuPause;
 	
 	private Cliente cliente;
+	public OnlinePlayer player2;
 	
-	public GameScreenClient(final StickSouls GAME, Cliente cliente) {
+	public GameScreenClient(final StickSouls GAME, Cliente cliente, boolean player1) {
 		this.GAME = GAME;
 		this.cliente = cliente;
 		menuPause = new PauseHud(GAME);
@@ -54,7 +57,17 @@ public class GameScreenClient implements Screen, MyInput{
 		world = new World(new Vector2(0, 0), true);
 		debugRenderer = new Box2DDebugRenderer();
 		
-		whiteStickman = new WhiteStickman(world, 0, 0, camera);
+		if(player1) {
+			whiteStickman = new OnlineWhiteStickman(world, 0, 0, camera);
+			player2 = new OnlinePlayer(world, 30, 0, camera);			
+			RedUtils.player1 = true;
+		}else {
+			whiteStickman = new OnlineWhiteStickman(world, 30, 0, camera);
+			player2 = new OnlinePlayer(world, 0, 0, camera);						
+			RedUtils.player1 = false;
+		}
+		
+		RedUtils.hiloCliente.setGame(this);
 	}
 
 	@Override
@@ -115,7 +128,7 @@ public class GameScreenClient implements Screen, MyInput{
 		
 		// Player movement and sprite
 		whiteStickman.draw();			
-		
+		player2.draw();
 		
 		Render.batch.end();
 		

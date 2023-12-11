@@ -22,14 +22,16 @@ import com.sticksouls.characters.WhiteStickman;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
+import com.sticksouls.redes.OnlinePlayer;
+import com.sticksouls.redes.RedUtils;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
 public class GameScreenServer implements Screen, MyInput{
 	
+	public OnlinePlayer player1, player2;
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
-	private WhiteStickman whiteStickman;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera camera;
@@ -55,6 +57,8 @@ public class GameScreenServer implements Screen, MyInput{
 		// Create world and setup debugRenderer
 		world = new World(new Vector2(0, 0), true);
 		
+		RedUtils.hiloServidor.setGame(this);
+		
 	}
 
 	@Override
@@ -64,7 +68,9 @@ public class GameScreenServer implements Screen, MyInput{
 		
 		debugRenderer = new Box2DDebugRenderer();
 		menuPause = new PauseHud(GAME);
-		whiteStickman = new WhiteStickman(world, 0, 0, camera);
+		
+		player1 = new OnlinePlayer(world, 0, 0, camera);
+		player2 = new OnlinePlayer(world, 30, 0, camera);
 
 		// Map render
 		Render.tiledMapRenderer = new OrthogonalTiledMapRenderer(Resources.MAP);
@@ -106,23 +112,21 @@ public class GameScreenServer implements Screen, MyInput{
 		Render.tiledMapRenderer.setView(camera);
 		Render.tiledMapRenderer.render();
 		Render.batch.setProjectionMatrix(camera.combined);
-
-		if(Gdx.input.isKeyJustPressed(Keys.TAB)) {
-			toggleConsola = !toggleConsola;
-		}
 		
 		Render.batch.begin();
 		
 		if(toggleConsola) {		
 			consola.render();
 		}
-		menuPause.draw();
-		whiteStickman.draw();			
+		
+		player1.draw();			
+		player2.draw();
 		
 		world.step(1/144f, 6, 2);
 	
 		//debugRenderer.render(world, camera.combined);		
 		
+		menuPause.draw();
 		Render.batch.end();
 		
 		
@@ -158,10 +162,21 @@ public class GameScreenServer implements Screen, MyInput{
 	@Override
 	public void keyDown(int keycode) {
 		switch(keycode) {
+		case Keys.W:
+			camera.position.set(camera.position.x, camera.position.y + 20, 0);
+			break;
+		case Keys.A:
+			camera.position.set(camera.position.x - 20, camera.position.y, 0);
+			break;
+		case Keys.S:
+			camera.position.set(camera.position.x, camera.position.y - 20, 0);
+			break;
+		case Keys.D:
+			camera.position.set(camera.position.x + 20, camera.position.y, 0);
+			break;
 		
-		case Keys.SPACE:
-			
-			whiteStickman.dash();
+		case Keys.TAB:
+			toggleConsola = !toggleConsola;
 			break;
 			
 		case Keys.ESCAPE:

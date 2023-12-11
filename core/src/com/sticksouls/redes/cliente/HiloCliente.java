@@ -7,12 +7,14 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import com.badlogic.gdx.math.Vector2;
+import com.sticksouls.enums.Directions;
 import com.sticksouls.redes.RedUtils;
-import com.sticksouls.screens.GameScreen;
+import com.sticksouls.redes.cliente.juego.GameScreenClient;
 
 public class HiloCliente extends Thread {
 	
-	private GameScreen game;
+	private GameScreenClient gameScreen;
 	private ClientScreen clientScreen;
 	private boolean end = false;
 	private boolean connected = false;
@@ -66,13 +68,21 @@ public class HiloCliente extends Thread {
 			break;
 		case "ready":
 			
-			clientScreen.ready();
+			clientScreen.ready(Boolean.parseBoolean(message[1]));
+
 			break;
 		case "serverDisconnected": 
 			end();
 			break;
 			
+		case "movement":
+			Vector2 linearVelocity = new Vector2(Float.parseFloat(message[1]), Float.parseFloat(message[2]));
+			gameScreen.player2.movement(linearVelocity);
+			break;
 			
+		case "attack":
+			gameScreen.player2.attack(Directions.valueOf(message[1]));
+			break;
 			
 			
 		default:
@@ -98,5 +108,8 @@ public class HiloCliente extends Thread {
 		socket.close();
 	}
 	
+	public void setGame(GameScreenClient gameScreen) {
+		this.gameScreen = gameScreen;
+	}
 
 }

@@ -1,7 +1,5 @@
 package com.sticksouls.items.weapons;
 
-import java.nio.file.spi.FileSystemProvider;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -17,19 +15,22 @@ public class Sword extends Weapon {
 	private boolean swinging = false;
 	private float swingTimer = 0;
 	private float maxSwingTime = .3f;
-	private Directions direction;
 	private RevoluteJoint jointSelected;
 	private RevoluteJointDef jointDefSelected;
 	
 	
 	public Sword(final Body CHARACTERBODY, World world) {
 		super("Sword", "a Sword", 1, 15, CHARACTERBODY, world);
-		jointSelected = rightJoint;
+		
 	}
 	
 	public void draw() {
 		super.draw();
-
+		
+		if(!swinging) {
+			jointSelected = rightJoint;
+		}
+		
 		sprite.setRotation(MathUtils.radiansToDegrees * weaponBody.getAngle());
 		sprite.setPosition(super.weaponBody.getPosition().x - sprite.getWidth()/2, super.weaponBody.getPosition().y - sprite.getHeight()/2);
 		sprite.setOriginCenter();
@@ -58,7 +59,8 @@ public class Sword extends Weapon {
 			jointDefSelected = super.topJointDef;
 
 			super.weaponBody.setAngularVelocity(-25);
-			super.weaponBody.setTransform(super.weaponBody.getWorldCenter(), 90 * MathUtils.degRad);
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y , 90 * MathUtils.degRad);
+			
 			break;
 		case RIGHT:
 			jointSelected = super.rightJoint;
@@ -71,7 +73,7 @@ public class Sword extends Weapon {
 			jointDefSelected = super.bottomJointDef;
 			
 			super.weaponBody.setAngularVelocity(25);
-			super.weaponBody.setTransform(super.weaponBody.getWorldCenter(), (90 * MathUtils.degRad));
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y, (90 * MathUtils.degRad));
 			break;
 		case LEFT:
 			jointSelected = super.leftJoint;
@@ -82,8 +84,49 @@ public class Sword extends Weapon {
 			break;
 		}
 		
-		super.destroyAllJoints();
-		super.createJoint(jointDefSelected);
+		super.destroyAllMyJoints(null);
+		jointSelected = super.createJoint(jointDefSelected);
+		
+		swingTimer = maxSwingTime;
+		swinging = true;
+		
+	}
+	
+	@Override
+	public void attack(Directions direction) {	
+		switch(direction) {
+		case TOP:
+			jointSelected = super.topJoint;
+			jointDefSelected = super.topJointDef;
+
+			super.weaponBody.setAngularVelocity(-25);
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y , 90 * MathUtils.degRad);
+			
+			break;
+		case RIGHT:
+			jointSelected = super.rightJoint;
+			jointDefSelected = super.rightJointDef;			
+			
+			super.weaponBody.setAngularVelocity(-25);
+			break;
+		case BOTTOM:
+			jointSelected = super.bottomJoint;
+			jointDefSelected = super.bottomJointDef;
+			
+			super.weaponBody.setAngularVelocity(25);
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y, (90 * MathUtils.degRad));
+			break;
+		case LEFT:
+			jointSelected = super.leftJoint;
+			jointDefSelected = super.leftJointDef;
+			
+			super.weaponBody.setAngularVelocity(25);
+
+			break;
+		}
+		
+		super.destroyAllMyJoints(null);
+		jointSelected = super.createJoint(jointDefSelected);
 		
 		swingTimer = maxSwingTime;
 		swinging = true;
@@ -114,13 +157,13 @@ public class Sword extends Weapon {
 			swinging = false;
 
 			super.weaponBody.setAngularVelocity(0);
-			super.destroyAllJoints();
-			super.createJoint(super.rightJointDef);
+			super.destroyAllMyJoints(jointSelected);
+			super.rightJoint = super.createJoint(super.rightJointDef);
 			
 			return false;
 		}
 		
 		return true;
 	}
-
+	
 }
