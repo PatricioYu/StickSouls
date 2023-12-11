@@ -1,5 +1,7 @@
 package com.sticksouls.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.StickSouls;
 import com.sticksouls.characters.WhiteStickman;
+import com.sticksouls.enemies.Enemy;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
@@ -30,6 +33,7 @@ public class GameScreen implements Screen, MyInput{
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
 	private WhiteStickman whiteStickman;
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera camera;
@@ -51,6 +55,7 @@ public class GameScreen implements Screen, MyInput{
 		debugRenderer = new Box2DDebugRenderer();
 		
 		whiteStickman = new WhiteStickman(world, 0, 0, camera);
+		enemies.add(new Enemy(world, 50, 50, camera));
 	}
 
 	@Override
@@ -111,6 +116,9 @@ public class GameScreen implements Screen, MyInput{
 		
 		// Player movement and sprite
 		whiteStickman.draw();			
+		for(Enemy e: enemies){
+			e.draw();
+		}
 		
 		
 		Render.batch.end();
@@ -141,6 +149,7 @@ public class GameScreen implements Screen, MyInput{
 	public void dispose() {
 		world.dispose();
 		debugRenderer.dispose();
+		Resources.ENEMY_TEXTURE.dispose();
 	}
 
 	@Override

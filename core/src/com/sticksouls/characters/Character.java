@@ -18,7 +18,7 @@ public abstract class Character {
 	protected int hp, stamina, currency;
 	protected float frameDuration = 0.1f, stateTime;
 	protected Weapon weapon;
-	protected Sprite idleSprite;
+	// protected Sprite idleSprite;
 	protected Texture spriteSheet;
 	protected TextureRegion[][] frames;
 	protected TextureRegion[] walkFrames;
@@ -30,7 +30,6 @@ public abstract class Character {
 		this.hp = hp;
 		this.stamina = stamina;
 		this.currency = currency;
-		
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;

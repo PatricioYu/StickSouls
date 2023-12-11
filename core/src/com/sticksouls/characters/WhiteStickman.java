@@ -20,10 +20,10 @@ public class WhiteStickman extends Character {
 	
 	private OrthographicCamera camera;
 	
-	private float dashVelocity = 50000f;
-	private float dashTime = .3f; 
-	private float dashTimeRemaining = 0f;
-	private float movementSpeed = 500f;
+	private float dashVelocity = 50000f, dashTime = .3f, dashTimeRemaining = 0f, movementSpeed = 500f;
+	// body's x and y
+	private float bodyX, bodyY;
+	
 	private boolean attacking = false;
 
 	public WhiteStickman(World world, float x, float y, OrthographicCamera camera) {
@@ -48,6 +48,9 @@ public class WhiteStickman extends Character {
 	}
 	
 	public void draw() {
+		bodyX = super.characterBody.getPosition().x;
+		bodyY = super.characterBody.getPosition().y;
+		
 		stateTime += Gdx.graphics.getDeltaTime();
 		
 		if (dashTimeRemaining > 0) {
@@ -60,9 +63,6 @@ public class WhiteStickman extends Character {
 		// Attack
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !attacking) {
 			
-			float bodyX = super.characterBody.getPosition().x;
-			float bodyY = super.characterBody.getPosition().y;
-
 			Vector3 screenCoordinates = new Vector3(bodyX, bodyY, 0);
 			camera.project(screenCoordinates);
 			
@@ -78,8 +78,7 @@ public class WhiteStickman extends Character {
 		// Animacion de mover, habria que crear un enum con las distintas animaciones y switchearlas
 		TextureRegion currentFrame = (state == CharacterState.WALK)?walkAnimation.getKeyFrame(stateTime, true):walkFrames[0];
 		
-		Render.batch.draw(currentFrame, super.characterBody.getPosition().x - currentFrame.getRegionWidth()/2, super.characterBody.getPosition().y - currentFrame.getRegionHeight()/2);
-		
+		Render.batch.draw(currentFrame, bodyX - currentFrame.getRegionWidth()/2, bodyY - currentFrame.getRegionHeight()/2);		
 	}
 	
 	private void movement() {
@@ -96,7 +95,7 @@ public class WhiteStickman extends Character {
         
 		super.characterBody.setLinearVelocity(moveX * movementSpeed , moveY * movementSpeed);
 		
-		camera.position.set(super.characterBody.getPosition().x, super.characterBody.getPosition().y, 0);
+		camera.position.set(bodyX, bodyY, 0);
 		camera.update();
 	}
 	
