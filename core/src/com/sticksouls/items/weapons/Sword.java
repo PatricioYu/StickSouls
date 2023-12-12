@@ -21,7 +21,6 @@ public class Sword extends Weapon {
 	
 	public Sword(final Body CHARACTERBODY, World world) {
 		super("Sword", "a Sword", 1, 15, CHARACTERBODY, world);
-		
 	}
 	
 	public void draw() {

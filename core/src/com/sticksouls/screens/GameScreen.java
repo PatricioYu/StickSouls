@@ -1,6 +1,7 @@
 package com.sticksouls.screens;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -29,7 +30,6 @@ import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 
 public class GameScreen implements Screen, MyInput{
-	
 	private final StickSouls GAME;
 	private InputMultiplexer inputHandler;
 	private WhiteStickman whiteStickman;
@@ -56,6 +56,7 @@ public class GameScreen implements Screen, MyInput{
 		
 		whiteStickman = new WhiteStickman(world, 0, 0, camera);
 		enemies.add(new Enemy(world, 50, 50, camera));
+		
 	}
 
 	@Override
@@ -114,10 +115,20 @@ public class GameScreen implements Screen, MyInput{
 		// Stepping the simulation
 		world.step(1/144f, 6, 2);
 		
-		// Player movement and sprite
+		// draw the player
 		whiteStickman.draw();			
-		for(Enemy e: enemies){
-			e.draw();
+		
+		// draw the enemies
+		Iterator<Enemy> iterator = enemies.iterator();
+		while(iterator.hasNext()) {
+			Enemy e = iterator.next();
+			
+			if(e.isAlive()) {
+				e.draw();
+			} else {
+				world.destroyBody(e.getBody());
+				enemies.remove(enemies.indexOf(e));
+			}			
 		}
 		
 		
@@ -166,6 +177,4 @@ public class GameScreen implements Screen, MyInput{
 			break;
 		} 
 	}
-	
-	
 }

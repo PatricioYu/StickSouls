@@ -54,7 +54,6 @@ public abstract class Weapon extends Item {
 		sprite.setPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		createWeaponBody(world);
-		
 		rightJointDef = new RevoluteJointDef();
 		leftJointDef = new RevoluteJointDef();
 		topJointDef = new RevoluteJointDef();
