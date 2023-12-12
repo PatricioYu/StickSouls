@@ -32,7 +32,7 @@ public class Enemy {
 		enemyBody = world.createBody(bodyDef);
 	
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(5, 10);
+		shape.setAsBox(5, 12);
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
@@ -53,6 +53,8 @@ public class Enemy {
 		Vector3 screenCoordinates = new Vector3(bodyX, bodyY, 0);
 		camera.project(screenCoordinates);
 		camera.update();
+		
+		enemyBody.setLinearVelocity(0,0);
 		
 		Render.batch.draw(sprite, bodyX - sprite.getRegionWidth()/2, bodyY - sprite.getRegionHeight()/2);
 	}

@@ -44,7 +44,7 @@ public class GameScreenClient implements Screen, MyInput{
 	public GameScreenClient(final StickSouls GAME, Cliente cliente, boolean player1) {
 		this.GAME = GAME;
 		this.cliente = cliente;
-		menuPause = new PauseHud(GAME);
+		menuPause = new PauseHud(GAME, cliente);
 		
 		// Create a new OrthographicCamera
 		camera = new OrthographicCamera();

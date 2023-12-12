@@ -22,7 +22,6 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 
 	final StickSouls GAME;
 	private Servidor servidor;
-	private ConsolaDebug consola;
 	
 	private Table clientTable;
 	private Table options;
@@ -35,10 +34,9 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 	
 	public ServerScreen(final StickSouls GAME) {
 		this.GAME = GAME;
-		this.consola = new ConsolaDebug();
 		super.visible = true;
 		
-		servidor = new Servidor(this, consola);
+		servidor = new Servidor(this);
 	}
 	
 	public void ready() {
@@ -57,7 +55,7 @@ public class ServerScreen extends Hud implements Screen, MyInput {
 		ScreenUtils.clear(0, 0, 0, 1);
 		Render.batch.begin();
 		if(ready) {
-			GAME.setScreen(new GameScreenServer(GAME, servidor, consola));
+			GAME.setScreen(new GameScreenServer(GAME, servidor));
 		}
 		this.draw();			
 	

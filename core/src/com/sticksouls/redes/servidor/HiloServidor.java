@@ -14,7 +14,6 @@ public class HiloServidor extends Thread {
 	
 	private GameScreenServer gameScreen;
 	private ServerScreen serverScreen;
-	private ConsolaDebug consola;
 	private ServerClient[] clients;
 	private DatagramSocket socket;
 	
@@ -22,17 +21,13 @@ public class HiloServidor extends Thread {
 	private int maxConections = 2;
 	private boolean end = false;
 	
-	public HiloServidor(ServerScreen serverScreen, ConsolaDebug consola) {
+	public HiloServidor(ServerScreen serverScreen) {
 		
 		clients = new ServerClient[maxConections];
 		this.serverScreen = serverScreen;
 		
 		try {
-			this.consola = consola;
 			socket = new DatagramSocket(RedUtils.port);
-			
-			consola.agregarMensajes("Servidor iniciado");
-
 		} catch (SocketException e) {
 			end = true;
 			e.printStackTrace();
@@ -67,13 +62,11 @@ public class HiloServidor extends Thread {
 		case "connect":
 			if(contConnections < 2) {
 				clients[contConnections] = new ServerClient(dp.getAddress(), dp.getPort());
-				consola.agregarMensajes("Conectado: " + dp.getAddress()+" "+ dp.getPort());
 				sendMessage("connected", clients[contConnections].ip, clients[contConnections].port);
 				
 				contConnections++;
 			}
 			else {
-				consola.agregarMensajes("Sala llena");
 				sendMessage("serverFull", dp.getAddress(), dp.getPort());
 			}
 			

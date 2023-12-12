@@ -106,7 +106,6 @@ public class WhiteStickman extends Character {
 	        float moveY = Gdx.input.isKeyPressed(Keys.W) ? 1 : Gdx.input.isKeyPressed(Keys.S) ? -1 : 0;
 			
 	        Vector2 impulse = new Vector2(dashVelocity * moveX, dashVelocity * moveY);
-	        
             super.characterBody.applyLinearImpulse(impulse, super.characterBody.getLocalCenter(), true);
 		} else {
             dashTimeRemaining = dashTime;

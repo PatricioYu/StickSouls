@@ -104,7 +104,7 @@ public class GameScreen implements Screen, MyInput{
 		Render.tiledMapRenderer.render();
 		Render.batch.setProjectionMatrix(camera.combined);
 		
-		//debugRenderer.render(world, camera.combined);
+		debugRenderer.render(world, camera.combined);
 		
 		Render.batch.begin();
 		

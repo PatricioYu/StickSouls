@@ -6,8 +6,8 @@ import com.sticksouls.screens.GameScreen;
 public class Servidor {
 	
 	
-	public Servidor(ServerScreen serverScreen, ConsolaDebug consola) {
-		RedUtils.hiloServidor = new HiloServidor(serverScreen, consola);
+	public Servidor(ServerScreen serverScreen) {
+		RedUtils.hiloServidor = new HiloServidor(serverScreen);
 		RedUtils.hiloServidor.start();
 		//RedUtils.hiloServidor.sendMessage("connect");
 	}

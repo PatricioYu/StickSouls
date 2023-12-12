@@ -40,7 +40,7 @@ public abstract class Character {
 		
 		// Create a circle shape and set its radius to 6
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(5, 10);
+		shape.setAsBox(5, 12);
 		
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();

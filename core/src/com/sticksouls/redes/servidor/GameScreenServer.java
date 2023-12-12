@@ -38,14 +38,11 @@ public class GameScreenServer implements Screen, MyInput{
 	private PauseHud menuPause;
 	
 	private Servidor servidor;
-	private ConsolaDebug consola;
-	
-	private boolean toggleConsola = false;
-	
-	public GameScreenServer(final StickSouls GAME, Servidor servidor, ConsolaDebug consola) {
+		
+	public GameScreenServer(final StickSouls GAME, Servidor servidor) {
 		this.GAME = GAME;
 		this.servidor = servidor;
-		this.consola = consola;
+		menuPause = new PauseHud(GAME, servidor);
 		
 		// Create a new OrthographicCamera
 		camera = new OrthographicCamera();
@@ -67,7 +64,6 @@ public class GameScreenServer implements Screen, MyInput{
 		InputsListener.setMyIndex(this);
 		
 		debugRenderer = new Box2DDebugRenderer();
-		menuPause = new PauseHud(GAME);
 		
 		player1 = new OnlinePlayer(world, 0, 0, camera);
 		player2 = new OnlinePlayer(world, 30, 0, camera);
@@ -115,10 +111,6 @@ public class GameScreenServer implements Screen, MyInput{
 		
 		Render.batch.begin();
 		
-		if(toggleConsola) {		
-			consola.render();
-		}
-		
 		player1.draw();			
 		player2.draw();
 		
@@ -135,7 +127,7 @@ public class GameScreenServer implements Screen, MyInput{
 
 	@Override
 	public void resize(int width, int height) {
-		consola.reEscalar(width, height);
+
 	}
 
 	@Override
@@ -175,10 +167,7 @@ public class GameScreenServer implements Screen, MyInput{
 			camera.position.set(camera.position.x + 20, camera.position.y, 0);
 			break;
 		
-		case Keys.TAB:
-			toggleConsola = !toggleConsola;
-			break;
-			
+
 		case Keys.ESCAPE:
 			menuPause.display();
 			break;

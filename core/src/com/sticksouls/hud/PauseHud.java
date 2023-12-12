@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.sticksouls.StickSouls;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
+import com.sticksouls.redes.cliente.Cliente;
+import com.sticksouls.redes.servidor.Servidor;
 import com.sticksouls.screens.MenuScreen;
 import com.sticksouls.utils.FontStyle;
 import com.sticksouls.utils.Resources;
@@ -25,9 +27,25 @@ public class PauseHud extends Hud implements MyInput {
 	private Label.LabelStyle optionsStyle, optionSelectedStyle;
 	
 	private int selected = -1;
-
+	private Cliente cliente;
+	private Servidor servidor;
+		
 	public PauseHud(final StickSouls GAME) {
 		this.GAME = GAME;
+		
+		InputsListener.addInputs(this);
+	}
+	
+	public PauseHud(final StickSouls GAME, Servidor servidor) {
+		this.GAME = GAME;
+		this.servidor = servidor;
+		
+		InputsListener.addInputs(this);
+	}
+	
+	public PauseHud(final StickSouls GAME, Cliente cliente) {
+		this.GAME = GAME;
+		this.cliente = cliente;
 		
 		InputsListener.addInputs(this);
 	}
@@ -121,6 +139,14 @@ public class PauseHud extends Hud implements MyInput {
 			
 			break;
 		case 2:
+			if(cliente != null) {
+				cliente.closeClient();
+			}
+			if(servidor != null) {
+				servidor.closeServer();
+			}
+				
+			
 			GAME.setScreen(new MenuScreen(GAME));
 			break;
 		}
