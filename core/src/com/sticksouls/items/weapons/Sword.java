@@ -23,19 +23,78 @@ public class Sword extends Weapon {
 		super("Sword", "a Sword", 1, 15, CHARACTERBODY, world);
 	}
 	
+	public Sword(final Body CHARACTERBODY, World world, boolean enemy) {
+		super("Sword", "a Sword", 1, 15, CHARACTERBODY, world);
+		super.enemy = enemy;
+	}
+	
 	public void draw() {
 		super.draw();
 		
 		if(!swinging) {
 			jointSelected = rightJoint;
 		}
-		
 		sprite.setRotation(MathUtils.radiansToDegrees * weaponBody.getAngle());
 		sprite.setPosition(super.weaponBody.getPosition().x - sprite.getWidth()/2, super.weaponBody.getPosition().y - sprite.getHeight()/2);
 		sprite.setOriginCenter();
 		
 		Render.batch.draw(sprite, sprite.getX(), sprite.getY(), sprite.getOriginX(), sprite.getOriginY(), sprite.getWidth(), sprite.getHeight(), 1, 1, sprite.getRotation());
 	}
+	
+	@Override	
+	public void botAttack(Vector2 characterCoordinates) {		
+		if(characterCoordinates.y < positiveLine(characterCoordinates.x, super.CHARACTERBODY.getPosition()) && characterCoordinates.y < negativeLine(characterCoordinates.x, super.CHARACTERBODY.getPosition())) {
+			direction = Directions.BOTTOM;
+		}
+		if(characterCoordinates.y <= positiveLine(characterCoordinates.x, super.CHARACTERBODY.getPosition()) && characterCoordinates.y >= negativeLine(characterCoordinates.x, super.CHARACTERBODY.getPosition())) {
+			direction = Directions.RIGHT;
+		}		
+		if(characterCoordinates.y > positiveLine(characterCoordinates.x, super.CHARACTERBODY.getPosition()) && characterCoordinates.y > negativeLine(characterCoordinates.x, super.CHARACTERBODY.getPosition())) {
+			direction = Directions.TOP;
+		}
+		if(characterCoordinates.y >= positiveLine(characterCoordinates.x, super.CHARACTERBODY.getPosition()) && characterCoordinates.y <= negativeLine(characterCoordinates.x, super.CHARACTERBODY.getPosition())) {
+			direction = Directions.LEFT;
+		}
+		
+		switch(direction) {
+		case TOP:
+			jointSelected = super.topJoint;
+			jointDefSelected = super.topJointDef;
+
+			super.weaponBody.setAngularVelocity(-25);
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y , 90 * MathUtils.degRad);
+			
+			break;
+		case RIGHT:
+			jointSelected = super.rightJoint;
+			jointDefSelected = super.rightJointDef;			
+			
+			super.weaponBody.setAngularVelocity(-25);
+			break;
+		case BOTTOM:
+			jointSelected = super.bottomJoint;
+			jointDefSelected = super.bottomJointDef;
+			
+			super.weaponBody.setAngularVelocity(25);
+			super.weaponBody.setTransform(super.weaponBody.getWorldCenter().x + jointSelected.getLocalAnchorB().x, super.weaponBody.getWorldCenter().y + jointSelected.getLocalAnchorB().y, (90 * MathUtils.degRad));
+			break;
+		case LEFT:
+			jointSelected = super.leftJoint;
+			jointDefSelected = super.leftJointDef;
+			
+			super.weaponBody.setAngularVelocity(25);
+
+			break;
+		}
+		
+		super.destroyAllMyJoints(null);
+		jointSelected = super.createJoint(jointDefSelected);
+		
+		swingTimer = maxSwingTime;
+		swinging = true;
+		
+	}
+
 	
 	@Override
 	public void attack(Vector2 characterCoordinates) {		

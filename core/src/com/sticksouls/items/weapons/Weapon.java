@@ -22,7 +22,7 @@ import com.sticksouls.items.Item;
 import com.sticksouls.utils.Resources;
 
 public abstract class Weapon extends Item {
-	protected int baseDmg, empoweredDmg;
+	protected int baseDmg = 20, empoweredDmg;
 	protected float frameDuration = 0.1f;
 	protected Sprite sprite;
 	protected TextureRegion[][] basicAttackFrames;
@@ -38,6 +38,7 @@ public abstract class Weapon extends Item {
 	private int width;
 	private int height;
 	protected boolean firstDraw = false;
+	protected boolean enemy = false;	
 	
 	protected RevoluteJoint rightJoint, leftJoint, topJoint, bottomJoint;
 	protected RevoluteJointDef rightJointDef, leftJointDef, topJointDef, bottomJointDef;
@@ -68,6 +69,7 @@ public abstract class Weapon extends Item {
 		
 		rightJoint = createJoint(rightJointDef);
 		
+		weaponBody.setUserData(this);
 	}
 
 	private RevoluteJoint createJoint(Vector2 anchorA, Vector2 anchorB, RevoluteJointDef jointDef) {
@@ -133,7 +135,8 @@ public abstract class Weapon extends Item {
 	protected void deleteFixture() {
 		weaponBody.destroyFixture(fixture);
 	}
-
+	
+	public abstract void botAttack(Vector2 characterCoordinates);
 	public abstract void attack(Vector2 characterCoordinates);
 	public abstract void attack(Directions direction);
 	public abstract boolean continueAttack();
@@ -154,6 +157,10 @@ public abstract class Weapon extends Item {
 	
 	public Directions getDirection() {
 		return direction;
+	}
+	
+	public boolean isEnemy() {
+		return enemy;
 	}
 }
 

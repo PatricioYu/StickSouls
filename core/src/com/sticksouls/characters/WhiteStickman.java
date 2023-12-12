@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sticksouls.enums.CharacterState;
 import com.sticksouls.items.weapons.Sword;
 import com.sticksouls.utils.Render;
@@ -24,6 +24,7 @@ public class WhiteStickman extends Character {
 	// body's x and y
 	private float bodyX, bodyY;
 	
+	private boolean alive = true;
 	private boolean attacking = false;
 
 	public WhiteStickman(World world, float x, float y, OrthographicCamera camera) {
@@ -112,4 +113,28 @@ public class WhiteStickman extends Character {
         }
     }
 	
+	public Vector2 getBodyPosition() {
+		return super.characterBody.getPosition();
+	}
+	
+	public void reduceHp(int dmg) {
+		if((hp - dmg) > 0) {
+			hp -= dmg;			
+		} else {
+			hp = 0;
+			alive = false;
+		}
+	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+	
+	public Body getWeapon() {
+		return super.weapon.getBody();
+	}
+	
+	public Body getBody() {
+		return super.characterBody;
+	}
 }

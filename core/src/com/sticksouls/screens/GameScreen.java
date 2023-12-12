@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.StickSouls;
 import com.sticksouls.characters.WhiteStickman;
+import com.sticksouls.contactlistener.MyContactListener;
 import com.sticksouls.enemies.Enemy;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
@@ -38,6 +39,8 @@ public class GameScreen implements Screen, MyInput{
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera camera;
 	private PauseHud menuPause;
+	private MyContactListener contactListener;
+	private boolean gameOver = false;
 	
 	public GameScreen(final StickSouls GAME) {
 		this.GAME = GAME;
@@ -52,11 +55,12 @@ public class GameScreen implements Screen, MyInput{
 		Box2D.init();
 		// Create world and setup debugRenderer
 		world = new World(new Vector2(0, 0), true);
+		contactListener = new MyContactListener();
+		world.setContactListener(contactListener);
+		
 		debugRenderer = new Box2DDebugRenderer();
 		
 		whiteStickman = new WhiteStickman(world, 0, 0, camera);
-		enemies.add(new Enemy(world, 50, 50, camera));
-		
 	}
 
 	@Override
@@ -95,11 +99,27 @@ public class GameScreen implements Screen, MyInput{
 			}
 		}
 		
+		layer = (TiledMapTileLayer) Resources.MAP.getLayers().get("EnemySpawn");
+		
+		for(int i = 0; i < layer.getHeight(); i++) {
+			for(int j = 0; j < layer.getWidth(); j++) {
+				Cell cell = layer.getCell(j, i);
+				
+				if(cell != null && cell.getTile().getObjects().getCount() == 1) {
+					float worldX = j * layer.getTileWidth();
+		            float worldY = i * layer.getTileHeight();
+		            
+		            enemies.add(new Enemy(world, worldX + 12, worldY + 12, camera));
+				}
+			}
+		}
+		
 		
 	}
-
+	
 	@Override
 	public void render(float delta) {
+		
 		camera.update();
 		Render.tiledMapRenderer.setView(camera);
 		Render.tiledMapRenderer.render();
@@ -116,18 +136,33 @@ public class GameScreen implements Screen, MyInput{
 		world.step(1/144f, 6, 2);
 		
 		// draw the player
-		whiteStickman.draw();			
+		if(whiteStickman.isAlive()) {
+			whiteStickman.draw();						
+		}
+		else {
+			menuPause.display();
+			if(!gameOver) {
+				world.destroyBody(whiteStickman.getWeapon());
+				world.destroyBody(whiteStickman.getBody());
+				gameOver = true;
+			}
+		}
+		
+		
+		
 		
 		// draw the enemies
 		Iterator<Enemy> iterator = enemies.iterator();
+		
 		while(iterator.hasNext()) {
 			Enemy e = iterator.next();
 			
 			if(e.isAlive()) {
-				e.draw();
+				e.draw(whiteStickman.getBodyPosition());
 			} else {
+				world.destroyBody(e.getWeapon());
 				world.destroyBody(e.getBody());
-				enemies.remove(enemies.indexOf(e));
+				iterator.remove();
 			}			
 		}
 		

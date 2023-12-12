@@ -15,7 +15,7 @@ import com.sticksouls.items.weapons.Weapon;
 
 public abstract class Character {
 	protected final int ROWS = 1, COLUMNS = 4;
-	protected int hp, stamina, currency;
+	protected int hp = 100, stamina, currency;
 	protected float frameDuration = 0.1f, stateTime;
 	protected Weapon weapon;
 	// protected Sprite idleSprite;
@@ -54,7 +54,7 @@ public abstract class Character {
 		shape.dispose();
 		
 		characterBody.setTransform(x, y, 0);
-		
+		characterBody.setUserData(this);
 		state = CharacterState.IDLE;
 	}
 
