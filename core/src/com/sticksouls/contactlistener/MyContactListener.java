@@ -5,9 +5,8 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.sticksouls.characters.WhiteStickman;
+import com.sticksouls.characters.Character;
 import com.sticksouls.enemies.Enemy;
-import com.sticksouls.items.weapons.Sword;
 import com.sticksouls.items.weapons.Weapon;
 
 public class MyContactListener implements ContactListener {
@@ -21,14 +20,13 @@ public class MyContactListener implements ContactListener {
 			Weapon weapon = (Weapon) bodyA.getUserData();
 			if(!weapon.isEnemy()) {
 				Enemy enemy = (Enemy) bodyB.getUserData();
-				
 				enemy.reduceHp(weapon.getBaseDmg());
 			}
 		}
 		
-		if(bodyB.getUserData() instanceof Weapon && bodyA.getUserData() instanceof WhiteStickman) {
+		if(bodyB.getUserData() instanceof Weapon && bodyA.getUserData() instanceof Character) {
 			Weapon weapon = (Weapon) bodyB.getUserData();
-			WhiteStickman target = (WhiteStickman) bodyA.getUserData();
+			Character target = (Character) bodyA.getUserData();
 			target.reduceHp(weapon.getBaseDmg());	
 		}
 		

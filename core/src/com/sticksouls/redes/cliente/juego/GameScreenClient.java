@@ -1,5 +1,8 @@
 package com.sticksouls.redes.cliente.juego;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
@@ -17,12 +20,14 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.sticksouls.StickSouls;
 import com.sticksouls.hud.PauseHud;
 import com.sticksouls.inputs.InputsListener;
 import com.sticksouls.inputs.MyInput;
-import com.sticksouls.items.weapons.OnlineWhiteStickman;
+import com.sticksouls.redes.OnlineClientEnemy;
 import com.sticksouls.redes.OnlinePlayer;
+import com.sticksouls.redes.OnlineWhiteStickman;
 import com.sticksouls.redes.RedUtils;
 import com.sticksouls.redes.cliente.Cliente;
 import com.sticksouls.utils.Render;
@@ -35,8 +40,10 @@ public class GameScreenClient implements Screen, MyInput{
 	private OnlineWhiteStickman whiteStickman;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
+	private ArrayList<OnlineClientEnemy> enemies = new ArrayList<OnlineClientEnemy>();
 	private OrthographicCamera camera;
 	private PauseHud menuPause;
+	private boolean gameOver = false;
 	
 	private Cliente cliente;
 	public OnlinePlayer player2;
@@ -55,6 +62,7 @@ public class GameScreenClient implements Screen, MyInput{
 		Box2D.init();
 		// Create world and setup debugRenderer
 		world = new World(new Vector2(0, 0), true);
+
 		debugRenderer = new Box2DDebugRenderer();
 		
 		if(player1) {
@@ -106,6 +114,22 @@ public class GameScreenClient implements Screen, MyInput{
 			}
 		}
 		
+		layer = (TiledMapTileLayer) Resources.MAP.getLayers().get("EnemySpawn");
+		
+		for(int i = 0; i < layer.getHeight(); i++) {
+			for(int j = 0; j < layer.getWidth(); j++) {
+				Cell cell = layer.getCell(j, i);
+				
+				if(cell != null && cell.getTile().getObjects().getCount() == 1) {
+					float worldX = j * layer.getTileWidth();
+		            float worldY = i * layer.getTileHeight();
+		            
+		            enemies.add(new OnlineClientEnemy(world, worldX + 12, worldY + 12, camera));
+		            //enemies.get(enemies.size()-1).setIndex(enemies.size()-1);
+				}
+			}
+		}
+		
 		
 	}
 
@@ -127,11 +151,52 @@ public class GameScreenClient implements Screen, MyInput{
 		world.step(1/144f, 6, 2);
 		
 		// Player movement and sprite
-		whiteStickman.draw();			
+
+		if(whiteStickman.isAlive()) {
+			whiteStickman.draw();						
+		}
+		else {
+			menuPause.display();
+			if(!gameOver) {
+				world.destroyBody(whiteStickman.getWeapon());
+				world.destroyBody(whiteStickman.getBody());
+				gameOver = true;
+			}
+		}
 		player2.draw();
+		
+		Iterator<OnlineClientEnemy> iterator = enemies.iterator();
+		
+		while(iterator.hasNext()) {
+			OnlineClientEnemy e = iterator.next();
+			
+			if(e.isDrawable() && e.isAlive()) {
+				e.draw();
+			}else if(!e.isAlive()) {
+				iterator.remove();
+				//enemies.remove(enemies.indexOf(e));
+			}
+		}
+		
 		
 		Render.batch.end();
 		
+	}
+	
+	public void destroyPlayer(OnlinePlayer player) {
+		world.destroyBody(player.getWeapon());
+		world.destroyBody(player.getBody());
+	}
+	
+	public void destroyEnemy(int index) {
+		//for(int i = 0; i < enemies.size-1; i++) {
+			//if(enemies.get(i).index == index){
+				enemies.get(index).setdead();
+				world.destroyBody(enemies.get(index).getWeapon());
+				world.destroyBody(enemies.get(index).getBody());	
+			//}
+		//}
+
 	}
 
 	@Override
@@ -175,5 +240,8 @@ public class GameScreenClient implements Screen, MyInput{
 		} 
 	}
 	
+	public ArrayList<OnlineClientEnemy> getEnemies(){
+		return enemies;
+	}
 	
 }

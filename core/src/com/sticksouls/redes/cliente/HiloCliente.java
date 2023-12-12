@@ -84,6 +84,18 @@ public class HiloCliente extends Thread {
 			gameScreen.player2.attack(Directions.valueOf(message[1]));
 			break;
 			
+		case "botAttack":
+			gameScreen.getEnemies().get(Integer.parseInt(message[1])).attack(new Vector2(Float.parseFloat(message[2]), Float.parseFloat(message[3])));
+			break;
+			
+		case "enemy":
+			gameScreen.getEnemies().get(Integer.parseInt(message[1])).getBody().setLinearVelocity(new Vector2(Float.parseFloat(message[2]), Float.parseFloat(message[3])));
+			gameScreen.getEnemies().get(Integer.parseInt(message[1])).toggleDrawable();
+			break;
+			
+		case "destroyEnemy":
+			gameScreen.destroyEnemy(Integer.parseInt(message[1]));
+			break;
 			
 		default:
 			System.out.println("Mensaje[0] mal mandado: " + message[0]);

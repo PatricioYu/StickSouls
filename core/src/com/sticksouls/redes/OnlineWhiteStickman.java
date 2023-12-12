@@ -1,4 +1,4 @@
-package com.sticksouls.items.weapons;
+package com.sticksouls.redes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sticksouls.enums.CharacterState;
-import com.sticksouls.redes.RedUtils;
+import com.sticksouls.items.weapons.Sword;
 import com.sticksouls.utils.Render;
 import com.sticksouls.utils.Resources;
 import com.sticksouls.characters.Character;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -25,6 +26,7 @@ public abstract class Character {
 	protected Animation<TextureRegion> walkAnimation;
 	protected Body characterBody;
 	protected CharacterState state;
+	protected boolean alive = true;
 
 	protected Character(World world, float x, float y, int hp, int stamina, int currency) {
 		this.hp = hp;
@@ -58,6 +60,15 @@ public abstract class Character {
 		state = CharacterState.IDLE;
 	}
 
+	public void reduceHp(int dmg) {
+		if((hp - dmg) > 0) {
+			hp -= dmg;			
+		} else {
+			hp = 0;
+			alive = false;
+		}
+	}
+
 	// getters
 	public int getHp() {
 		return hp;
@@ -70,4 +81,21 @@ public abstract class Character {
 	public int getCurrency() {
 		return currency;
 	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+	
+	public Body getWeapon() {
+		return this.weapon.getBody();
+	}
+	
+	public Body getBody() {
+		return this.characterBody;
+	}
+	
+	public Vector2 getBodyPosition() {
+		return this.characterBody.getPosition();
+	}
+	
 }

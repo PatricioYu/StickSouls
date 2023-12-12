@@ -24,7 +24,6 @@ public class WhiteStickman extends Character {
 	// body's x and y
 	private float bodyX, bodyY;
 	
-	private boolean alive = true;
 	private boolean attacking = false;
 
 	public WhiteStickman(World world, float x, float y, OrthographicCamera camera) {
@@ -113,28 +112,4 @@ public class WhiteStickman extends Character {
         }
     }
 	
-	public Vector2 getBodyPosition() {
-		return super.characterBody.getPosition();
-	}
-	
-	public void reduceHp(int dmg) {
-		if((hp - dmg) > 0) {
-			hp -= dmg;			
-		} else {
-			hp = 0;
-			alive = false;
-		}
-	}
-	
-	public boolean isAlive() {
-		return alive;
-	}
-	
-	public Body getWeapon() {
-		return super.weapon.getBody();
-	}
-	
-	public Body getBody() {
-		return super.characterBody;
-	}
 }

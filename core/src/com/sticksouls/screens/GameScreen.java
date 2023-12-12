@@ -148,9 +148,6 @@ public class GameScreen implements Screen, MyInput{
 			}
 		}
 		
-		
-		
-		
 		// draw the enemies
 		Iterator<Enemy> iterator = enemies.iterator();
 		
